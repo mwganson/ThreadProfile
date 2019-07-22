@@ -34,7 +34,9 @@ What is this?  This is a property of the underlying BSpline object.  This is rea
 ## Version
 This is the version of the ThreadProfile workbench used to create the ThreadProfile object, not the version of the ThreadProfile workbench currently installed.
 
-
+## FAQ
+* Why is there a line running up the thread?<br/>
+** This is the BSpline's seamline.  If you Pad / Extrude the profile you can see this seamline as a straight edge, similar to what you see in cylinders and extruded / padded circles.<br/>
 
 
 #### Release notes:<br/>
