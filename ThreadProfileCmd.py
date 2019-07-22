@@ -27,8 +27,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2019.07.22"
-__version__ = "1.00"
-version = 1.00
+__version__ = "1.10"
+version = 1.10
 
 
 from FreeCAD import Gui
