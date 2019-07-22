@@ -126,18 +126,20 @@ class _ThreadProfile(_DraftObject):
                 external=True
         step = obj.Quality #1 means do not skip any points, 2 means use every other, 3 every 3rd, etc.
         points = []
-        z=math.pi * 2 / 720 * step
+        alpha = 0
+
         if external:
             our_data = obj.external_data
         else:
             our_data = obj.internal_data
         for ii in range(0, len(our_data),step):
+            alpha += math.pi * 2 / 720 * step
             od = our_data[ii]
             radius = minor_diameter / 2 + od * pitch
-            x = math.cos(z) * radius
-            y = math.sin(z) * radius
+            x = math.cos(alpha) * radius
+            y = math.sin(alpha) * radius
             points.append(Base.Vector(x,y,0))
-            z += math.pi * 2 /720 * step
+            
         return points
 
 
@@ -191,12 +193,11 @@ class _ThreadProfile(_DraftObject):
 _ViewProviderBSpline = _ViewProviderWire
 
 def makeThreadProfile(minor_diameter=4.891,pitch=1,closed=True,placement=None,face=None,support=None,internal_or_external="External",internal_data=[],external_data=[]):
-    '''makeThreadProfile([closed],[placement]): Creates a thread profile object
+    '''minor_diameter=4.891,pitch=1,closed=True,placement=None,face=None,support=None,internal_or_external="External",internal_data=[],external_data=[]): Creates a thread profile object
 that can be swept along a helix to produce a thread.  Code is based on Draft.makeBSpline()'''
     if not FreeCAD.ActiveDocument:
         FreeCAD.Console.PrintError("No active document. Aborting\n")
         return
-
     else: fname = "ThreadProfile"
     obj = FreeCAD.ActiveDocument.addObject("Part::Part2DObjectPython",fname)
     _ThreadProfile(obj)
