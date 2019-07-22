@@ -1,6 +1,9 @@
 # ThreadProfile Workbench
 <img src="Resources/icons/ThreadProfileLogo.png" alt="icon">
 
+## Toolbar Icon
+Download the <a href = "https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/ThreadProfileSVGLogo.svg">SVG Toolbar Icon</a><br/>
+
 ## Installation
 Install via the Addon Manager in the Tools menu in FreeCAD version 0.17 and later.<br/>
 <br/>
