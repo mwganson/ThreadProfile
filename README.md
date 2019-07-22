@@ -26,7 +26,10 @@ This is the pitch for the thread.  You also need to set this in the Helix Pitch 
 
 ## Minor Diameter
 This is the minor diameter of your thread.  This is *NOT* the nominal diameter.  You need to look this value up and use the one for your desired nominal diameter, pitch, and fit tolerance.  Here are links to online calculators for <a href="https://www.amesweb.info/Screws/AsmeUnifiedInchScrewThread.aspx">Unified Inch Screwthreads</a> and for <a href="https://www.amesweb.info/Screws/IsoMetricScrewThread.aspx">Metric</a>.<br/>  Note: the profile is for metric threads, but it's basically the same as the one for ANSI threads, only difference being the root is rounded in metric threads, which IMO is not a concern.<br/>
-
+## Continuity
+What is this?  This is a property of the underlying BSpline object.  This is readonly and is only included for informational purposes.  Normally, this should be C2 continuity.  You can read more about smoothness <a href="https://en.wikipedia.org/wiki/Smoothness">here</a>.<br/>
+## Version
+This is the version of the ThreadProfile workbench used to create the ThreadProfile object, not the version of the ThreadProfile workbench currently installed.
 
 
 
