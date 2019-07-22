@@ -5,7 +5,8 @@
 Download the <a href = "https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/ThreadProfileSVGLogo.svg">SVG Toolbar Icon</a><br/>
 
 ## Installation
-Install via the Addon Manager in the Tools menu in FreeCAD version 0.17 and later.<br/>
+Install NOT YET AVAILABLE via the Addon Manager in the Tools menu in FreeCAD version 0.17 and later.<br/>
+You must install manually at the present time.  If you have git you can open a git bash in your FreeCAD Mod folder and install with: git clone https://github.com/mwganson/ThreadProfile.git  Then to do an update, git pull.  To find your Mod folder there is a macro called findConfigFiles, which can be installed with the Addon Manager.  Alternatively, you can download this as a .zip and extract it to the Mod folder.  Folder heirarchy should be Mod/ThreadProfile/ThreadProfileCmd.py, etc.<br/>
 <br/>
 ## Overview
 Use the 2d profile object created with this workbench to create threads by sweeping it along a helix of the appropriate height and pitch.  It is compatible for use in both the Part and Part Design workbenches in FreeCAD.  To use in Part Design, simply drag and drop the ThreadProfile object into your Body object just as you would a sketch.  You can then sweep it as you would a sketch using either the Additive Pipe (for external threads) or the Subtractive Pipe (for internal threads).  In Part workbench you would use the Sweep tool, which would then need to be cut (if an internal thread) from a suitable object, such as an extruded hexagon.<br/>
