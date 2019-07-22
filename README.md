@@ -50,5 +50,8 @@ When a Helix is created using the Make Helix command the Height property of the 
 The internal_data and external_data list properties define the radius of the ThreadProfile object at the various angles around the circumference.  There are 720 points.  Each point is the x-coordinate of a thread profile sketched on the xz plane. The first element in the list is the x-coordinate at z=1/720 degrees, then z=2/720 degrees, etc.  Don't worry, you don't need to include these parameters.  The default used is for the standard Metric M profile.  When the ThreadProfile is created the data points are used as such: each element is taken, then added to it the minor radius + pitch * element value for the x-coordinate.  To get the y-coordinate we use the current element index / 720.  We use the math.cos() and math.sin() functions, but let's not get too bogged down here.  You can view the source code for more details.<br/>
 
 #### Release notes:<br/>
+* 2019.07.22 (version 1.10)<br/>
+** Add Make Helix command<br/>
+** Add Thread Count property<br/>
 * 2019.07.22 (version 1.0)<br/>
 ** initial release<br/>
