@@ -21,9 +21,11 @@ There are a number of advantages to using ThreadProfile objects in your threads:
 The ThreadProfile object is really just a glorified rebranded Draft BSpline object.  In fact, the template code for producing it was unabashedly copied directly from the Draft workbench for use as a starting point, which I then modified to meet my needs.  In particular, the necessary properties, such as Pitch and Minor Diameter were added, along with the code necessary to produce the desired BSpline object.<br/>
 
 ## Create Object Command
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateObject.png" alt="create object"><br/>
 This creates the ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.
 
 ## Make Helix Command
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/MakeHelix.png" alt="make helix"><br/>
 The Make Helix command creates a Helix and sets its Pitch property to match the Pitch property of the ThreadProfile object.  This property is linked parametrically, thus any change to the ThreadProfile.Pitch property will also cause the Helix.Pitch property to update itself.  We also set the Helix.Height property to ThreadProfile.Pitch * ThreadProfile.ThreadCount, thus ensuring the Helix.Height property is such that the thread produced in the sweep will have Thread Count threads.  This is also parametrically linked.  Another thing that is done is the Helix.Placement property is copied from the ThreadProfile.Placement, thus the Helix, when created, will be positioned with the ThreadProfile object, but note that this placement property is not parametrically linked.
 
 ## Quality Property
