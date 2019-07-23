@@ -65,6 +65,7 @@ The internal_data and external_data list properties define the radius of the Thr
 * 2019.07.23 (version 1.21)<br/>
 ** Change Pitch type from Float to Length
 ** Check if Gui is up before creating view object
+** Recompute document before returning object from makeThreadProfile()
 * 2019.07.22 (version 1.20)<br/>
 ** Add link to online calculators<br/>
 * 2019.07.22 (version 1.10)<br/>

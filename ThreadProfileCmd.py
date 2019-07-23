@@ -292,9 +292,12 @@ class ThreadProfileMakeHelixCommandClass(object):
         doc.openTransaction("Make Helix")
         import Part,PartGui
         doc.addObject("Part::Helix","Helix")
-        doc.Helix.setExpression("Pitch",self.Name+'.Pitch')
-        doc.Helix.setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch')
-        doc.Helix.Placement=self.Placement
+        doc.recompute()
+        name = doc.ActiveObject.Name
+        getattr(doc,name).Label = name
+        getattr(doc,name).setExpression("Pitch",self.Name+'.Pitch')
+        getattr(doc,name).setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch')
+        getattr(doc,name).Placement=self.Placement
         doc.commitTransaction()
         doc.recompute()
         return
