@@ -4,6 +4,8 @@
 #  ThreadProfileCmd.py
 #  
 #  Copyright 2019 Mark Ganson <TheMarkster> mwganson at gmail
+#  Based on some code from Draft.py, authored by "Yorik van Havre, Werner Mayer, 
+#  Martin Burbaum, Ken Cline, Dmitry Chigrin, Daniel Falck"
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -34,10 +36,13 @@ import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
 import math
 import Draft
-from FreeCAD import Base, Gui
+from FreeCAD import Base
 import Draft_rc
 from PySide.QtCore import QT_TRANSLATE_NOOP
 from Draft import _DraftObject, getParam, _ViewProviderWire, formatObject, select
+
+if FreeCAD.GuiUp:
+    from FreeCAD import Gui
 
 __dir__ = os.path.dirname(__file__)
 iconPath = os.path.join( __dir__, 'Resources', 'icons' )
@@ -106,8 +111,10 @@ class _ThreadProfile(_DraftObject):
         return params
 
     def makePoints(self, obj):
-
-        pitch = obj.Pitch.Value
+        if hasattr(obj.Pitch,"Value"): #compatibility with objects created with version <= 1.20
+            pitch = obj.Pitch.Value
+        else:
+            pitch = obj.Pitch
         minor_diameter = obj.MinorDiameter.Value
         if "external" in obj.InternalOrExternal.lower():
             external = True
@@ -218,16 +225,16 @@ that can be swept along a helix to produce a thread.  Code is based on Draft.mak
         _ViewProviderWire(obj.ViewObject)
         formatObject(obj)
         select(obj)
-
+    FreeCAD.ActiveDocument.recompute()
     return obj
 
 
 def initialize():
-
-    Gui.addCommand("ThreadProfileCreateObject", ThreadProfileCreateObjectCommandClass())
-    Gui.addCommand("ThreadProfileMakeHelix", ThreadProfileMakeHelixCommandClass())
-    Gui.addCommand("ThreadProfileOpenOnlineCalculator", ThreadProfileOpenOnlineCalculatorCommandClass())
-    Gui.addCommand("ThreadProfileSettings", ThreadProfileSettingsCommandClass())
+    if FreeCAD.GuiUp:
+        Gui.addCommand("ThreadProfileCreateObject", ThreadProfileCreateObjectCommandClass())
+        Gui.addCommand("ThreadProfileMakeHelix", ThreadProfileMakeHelixCommandClass())
+        Gui.addCommand("ThreadProfileOpenOnlineCalculator", ThreadProfileOpenOnlineCalculatorCommandClass())
+        Gui.addCommand("ThreadProfileSettings", ThreadProfileSettingsCommandClass())
 
 
 #######################################################################################
@@ -238,7 +245,6 @@ class ThreadProfileSettingsCommandClass(object):
 
     def __init__(self):
         pass       
-
 
     def GetResources(self):
         return {'Pixmap'  : os.path.join( iconPath , 'Settings.png') , # the name of an icon file available in the resources
