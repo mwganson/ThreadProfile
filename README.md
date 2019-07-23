@@ -49,6 +49,7 @@ When a Helix is created using the Make Helix command the Height property of the 
 ** This is the BSpline's seamline.  If you Pad / Extrude the profile you can see this seamline as a straight edge, similar to what you see in cylinders and extruded / padded circles.<br/>
 * Is it possible to access this via Python scripting?<br/>
 ** Yes.  Use:<br/>
+<br/>
 import ThreadProfileCmd<br/>
 ThreadProfileCmd.makeThreadProfile()<br/>
 <br/>
