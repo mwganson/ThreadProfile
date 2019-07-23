@@ -4,6 +4,8 @@
 #  ThreadProfileCmd.py
 #  
 #  Copyright 2019 Mark Ganson <TheMarkster> mwganson at gmail
+#  Based on some code from Draft.py, authored by "Yorik van Havre, Werner Mayer, 
+#  Martin Burbaum, Ken Cline, Dmitry Chigrin, Daniel Falck"
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -26,28 +28,25 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2019.07.22"
-__version__ = "1.20"
-version = 1.20
-
-
-from FreeCAD import Gui
-from PySide import QtCore, QtGui
+__date__    = "2019.07.23"
+__version__ = "1.21"
+version = 1.21
 
 import FreeCAD, FreeCADGui, Part, os, math, re
+from PySide import QtCore, QtGui
+import math
+import Draft
+from FreeCAD import Base
+import Draft_rc
+from PySide.QtCore import QT_TRANSLATE_NOOP
+from Draft import _DraftObject, getParam, _ViewProviderWire, formatObject, select
+
+if FreeCAD.GuiUp:
+    from FreeCAD import Gui
+
 __dir__ = os.path.dirname(__file__)
 iconPath = os.path.join( __dir__, 'Resources', 'icons' )
 keepToolbar = False
-
-import math
-import Part, Draft
-from FreeCAD import Base
-import FreeCADGui, Draft_rc
-from PySide import QtCore
-from PySide.QtCore import QT_TRANSLATE_NOOP
-gui = True
-
-from Draft import _DraftObject, getParam, _ViewProviderWire, formatObject, select
 
 class _ThreadProfile(_DraftObject):
     "The ThreadProfile object"
@@ -63,7 +62,7 @@ class _ThreadProfile(_DraftObject):
         obj.addProperty("App::PropertyLength", "MinorDiameter", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "The minor diameter of the thread"))
         obj.addProperty("App::PropertyFloatList","internal_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "Data used to construct internal thread"))
         obj.addProperty("App::PropertyFloatList","external_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "Data used to construct external thread"))
-        obj.addProperty("App::PropertyFloatConstraint", "Pitch", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Pitch of the thread, use 25.4 / TPI if in mm mode else 1 / TPI to convert from threads per inch"))
+        obj.addProperty("App::PropertyLength", "Pitch", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Pitch of the thread, use 25.4 / TPI if in mm mode else 1 / TPI to convert from threads per inch"))
         obj.addProperty("App::PropertyEnumeration", "InternalOrExternal", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Whether to make internal or external thread profile"))
         obj.InternalOrExternal=["Internal", "External"]
         obj.InternalOrExternal="External"
@@ -78,7 +77,6 @@ class _ThreadProfile(_DraftObject):
 "The Minor Diameter is *NOT* the same as the Nominal Diameter.  You need to lookup the correct Minor Diameter to use for the desired Nominal Diameter and Pitch for the desired fit tolerance."
 ]
         obj.Quality = (1,1,12,1) #1 default, 1 minimum, 12 max, 1 step size
-        obj.Pitch = (1,0,500,.1)
         obj.setEditorMode("internal_data", 2) #0 = normal, 1 = readonly, 2 = hidden
         obj.setEditorMode("Closed", 2)
         obj.setEditorMode("MakeFace", 2)
@@ -113,8 +111,10 @@ class _ThreadProfile(_DraftObject):
         return params
 
     def makePoints(self, obj):
-
-        pitch = obj.Pitch
+        if hasattr(obj.Pitch,"Value"): #compatibility with objects created with version <= 1.20
+            pitch = obj.Pitch.Value
+        else:
+            pitch = obj.Pitch
         minor_diameter = obj.MinorDiameter.Value
         if "external" in obj.InternalOrExternal.lower():
             external = True
@@ -221,20 +221,20 @@ that can be swept along a helix to produce a thread.  Code is based on Draft.mak
     if face != None:
         obj.MakeFace = face
     if placement: obj.Placement = placement
-    if gui:
+    if FreeCAD.GuiUp:
         _ViewProviderWire(obj.ViewObject)
         formatObject(obj)
         select(obj)
-
+    FreeCAD.ActiveDocument.recompute()
     return obj
 
 
 def initialize():
-
-    Gui.addCommand("ThreadProfileCreateObject", ThreadProfileCreateObjectCommandClass())
-    Gui.addCommand("ThreadProfileMakeHelix", ThreadProfileMakeHelixCommandClass())
-    Gui.addCommand("ThreadProfileOpenOnlineCalculator", ThreadProfileOpenOnlineCalculatorCommandClass())
-    Gui.addCommand("ThreadProfileSettings", ThreadProfileSettingsCommandClass())
+    if FreeCAD.GuiUp:
+        Gui.addCommand("ThreadProfileCreateObject", ThreadProfileCreateObjectCommandClass())
+        Gui.addCommand("ThreadProfileMakeHelix", ThreadProfileMakeHelixCommandClass())
+        Gui.addCommand("ThreadProfileOpenOnlineCalculator", ThreadProfileOpenOnlineCalculatorCommandClass())
+        Gui.addCommand("ThreadProfileSettings", ThreadProfileSettingsCommandClass())
 
 
 #######################################################################################
@@ -246,10 +246,8 @@ class ThreadProfileSettingsCommandClass(object):
     def __init__(self):
         pass       
 
-
     def GetResources(self):
         return {'Pixmap'  : os.path.join( iconPath , 'Settings.png') , # the name of an icon file available in the resources
-
             'MenuText': "&Settings" ,
             'ToolTip' : "Workbench settings dialog"}
  
@@ -294,9 +292,12 @@ class ThreadProfileMakeHelixCommandClass(object):
         doc.openTransaction("Make Helix")
         import Part,PartGui
         doc.addObject("Part::Helix","Helix")
-        doc.Helix.setExpression("Pitch",self.Name+'.Pitch')
-        doc.Helix.setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch')
-        doc.Helix.Placement=self.Placement
+        doc.recompute()
+        name = doc.ActiveObject.Name
+        getattr(doc,name).Label = name
+        getattr(doc,name).setExpression("Pitch",self.Name+'.Pitch')
+        getattr(doc,name).setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch')
+        getattr(doc,name).Placement=self.Placement
         doc.commitTransaction()
         doc.recompute()
         return
