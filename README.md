@@ -66,6 +66,7 @@ The internal_data and external_data list properties define the radius of the Thr
 ** Change Pitch type from Float to Length
 ** Check if Gui is up before creating view object
 ** Recompute document before returning object from makeThreadProfile()
+** Fix bug where if more than one helix is made we set the correct helix properties
 * 2019.07.22 (version 1.20)<br/>
 ** Add link to online calculators<br/>
 * 2019.07.22 (version 1.10)<br/>
