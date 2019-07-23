@@ -27,8 +27,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2019.07.22"
-__version__ = "1.10"
-version = 1.10
+__version__ = "1.20"
+version = 1.20
 
 
 from FreeCAD import Gui
@@ -64,8 +64,6 @@ class _ThreadProfile(_DraftObject):
         obj.addProperty("App::PropertyFloatList","internal_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "Data used to construct internal thread"))
         obj.addProperty("App::PropertyFloatList","external_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "Data used to construct external thread"))
         obj.addProperty("App::PropertyFloatConstraint", "Pitch", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Pitch of the thread, use 25.4 / TPI if in mm mode else 1 / TPI to convert from threads per inch"))
-
-        #obj.addProperty("App::PropertyBool", "MakeExternalThread", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "If True, make an external thread profile, if False, make an internal thread profile"))
         obj.addProperty("App::PropertyEnumeration", "InternalOrExternal", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Whether to make internal or external thread profile"))
         obj.InternalOrExternal=["Internal", "External"]
         obj.InternalOrExternal="External"
@@ -235,6 +233,7 @@ def initialize():
 
     Gui.addCommand("ThreadProfileCreateObject", ThreadProfileCreateObjectCommandClass())
     Gui.addCommand("ThreadProfileMakeHelix", ThreadProfileMakeHelixCommandClass())
+    Gui.addCommand("ThreadProfileOpenOnlineCalculator", ThreadProfileOpenOnlineCalculatorCommandClass())
     Gui.addCommand("ThreadProfileSettings", ThreadProfileSettingsCommandClass())
 
 
@@ -316,6 +315,32 @@ class ThreadProfileMakeHelixCommandClass(object):
             self.Name = selection[0].Object.Name
         return True
 
+###################################################################################
+
+class ThreadProfileOpenOnlineCalculatorCommandClass(object):
+    """Open Online Calculator command"""
+    def __init__(self):
+        pass
+
+    def GetResources(self):
+        return {'Pixmap'  : os.path.join( iconPath , 'OpenOnlineCalculator.png') ,
+            'MenuText': "&Open Online Calculator" ,
+            'ToolTip' : "Open online calculator to determine minor diameter for desired thread fit."}
+ 
+    def Activated(self):
+        import webbrowser
+        items = ["Open online metric calculator", "Open online unified inch calculator", "Cancel"]
+        window = QtGui.QApplication.activeWindow()
+        item,ok = QtGui.QInputDialog.getItem(window,'ThreadProfile','Open online calculator in default browser?',items,0,False)
+        if ok and item == items[0]:
+            webbrowser.open('https://www.amesweb.info/Screws/IsoMetricScrewThread.aspx')
+        elif ok and item == items[1]:
+            webbrowser.open('https://www.amesweb.info/Screws/AsmeUnifiedInchScrewThread.aspx')
+
+        return
+   
+    def IsActive(self):
+        return True
 
 
 ####################################################################################
