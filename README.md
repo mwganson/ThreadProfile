@@ -8,7 +8,7 @@ Download the <a href = "https://github.com/mwganson/ThreadProfile/blob/master/Re
 Can be installed via the AddonManager in Tools menu -> AddonManager if you have a very recent build.  Open the AddonManger.  Click the Configure icon.  Add this to the custom repositories section: https://github.com/mwganson/ThreadProfile  Close and restart the AddonManager.  You should now see ThreadProfile listed in the Workbench tab.
 <br/>
 ## Overview
-Use the 2d profile object created with this workbench to create threads by sweeping it along a helix of the appropriate height and pitch.  It is compatible for use in both the Part and Part Design workbenches in FreeCAD.  To use in Part Design, simply drag and drop the ThreadProfile object into your Body object just as you would a sketch.  You can then sweep it as you would a sketch using either the Additive Pipe (for external threads) or the Subtractive Pipe (for internal threads).  In Part workbench you would use the Sweep tool, which would then need to be cut (if an internal thread) from a suitable object, such as an extruded hexagon.<br/>
+Use the 2d profile object created with this workbench to create threads by sweeping it along a helix of the appropriate height and pitch.  It is compatible for use in both the Part and Part Design workbenches in FreeCAD.  To use in Part Design, as of version 1.22, if there is an active body the ThreadProfile object will be created inside the body.  You can then sweep it as you would a sketch using either the Additive Pipe (for external threads) or the Subtractive Pipe (for internal threads).  In Part workbench you would use the Sweep tool, which would then need to be cut (if an internal thread) from a suitable object, such as an extruded hexagon.<br/>
 <br/>
 ## Advantages
 There are a number of advantages to using ThreadProfile objects in your threads:<br/>
@@ -22,7 +22,7 @@ The ThreadProfile object is really just a glorified rebranded Draft BSpline obje
 
 ## Create Object Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateObject.png" alt="create object"><br/>
-This creates the ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.
+This creates the ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.  If there is an active Part Design Body, the object will be placed inside it.  Failing that, if there is an active Part container the object will be placed into that.
 
 ## Make Helix Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/MakeHelix.png" alt="make helix"><br/>
