@@ -29,8 +29,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2019.07.23"
-__version__ = "1.22"
-version = 1.22
+__version__ = "1.23"
+version = 1.23
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -304,6 +304,17 @@ class ThreadProfileMakeHelixCommandClass(object):
         getattr(doc,name).setExpression("Pitch",self.Name+'.Pitch')
         getattr(doc,name).setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch')
         getattr(doc,name).Placement=self.Placement
+        body=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("pdbody")
+        part=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("part")
+        if part:
+            part.Group=part.Group+[getattr(doc,name)]
+        if body:
+            pass
+            import PartDesignGui
+            getattr(doc,body.Name).newObject('PartDesign::ShapeBinder','ShapeBinder')
+            getattr(doc,doc.ActiveObject.Name).Support = [(getattr(doc,name),'')]
+            getattr(FreeCADGui.ActiveDocument,name).Visibility=False
+
         doc.commitTransaction()
         doc.recompute()
         return
