@@ -29,8 +29,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2019.07.23"
-__version__ = "1.21"
-version = 1.21
+__version__ = "1.22"
+version = 1.22
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -225,6 +225,12 @@ that can be swept along a helix to produce a thread.  Code is based on Draft.mak
         _ViewProviderWire(obj.ViewObject)
         formatObject(obj)
         select(obj)
+        body=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("pdbody")
+        part=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("part")
+        if body:
+            body.Group=body.Group+[obj]
+        elif part:
+            part.Group=part.Group+[obj]
     FreeCAD.ActiveDocument.recompute()
     return obj
 
