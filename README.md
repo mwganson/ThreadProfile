@@ -8,7 +8,7 @@ Download the <a href = "https://github.com/mwganson/ThreadProfile/blob/master/Re
 Can be installed via the AddonManager in Tools menu -> AddonManager if you have a very recent build.  Open the AddonManger.  Click the Configure icon.  Add this to the custom repositories section: https://github.com/mwganson/ThreadProfile  Close and restart the AddonManager.  You should now see ThreadProfile listed in the Workbench tab.
 <br/>
 ## Overview
-Use the 2d profile object created with this workbench to create threads by sweeping it along a helix of the appropriate height and pitch.  It is compatible for use in both the Part and Part Design workbenches in FreeCAD.  To use in Part Design, as of version 1.22, if there is an active body the ThreadProfile object will be created inside the body.  You can then sweep it as you would a sketch using either the Additive Pipe (for external threads) or the Subtractive Pipe (for internal threads).  In Part workbench you would use the Sweep tool, which would then need to be cut (if an internal thread) from a suitable object, such as an extruded hexagon.<br/>
+Use the 2d profile object created with this workbench to create threads by sweeping it along a helix of the appropriate height and pitch.  It is compatible for use in both the Part and Part Design workbenches in FreeCAD.  To use in Part Design if there is an active body the ThreadProfile object will be created inside the body.  Then select the ThreadProfile object and click the Make Helix toolbar icon to create a helix.  A new shapebinder will be created linking the helix, and the helix will be hidden.  You can then sweep it as you would a sketch using either the Additive Pipe (for external threads) or the Subtractive Pipe (for internal threads).  In Part workbench you would use the Sweep tool, which would then need to be cut (if an internal thread) from a suitable object, such as an extruded hexagon.<br/>
 <br/>
 ## Advantages
 There are a number of advantages to using ThreadProfile objects in your threads:<br/>
@@ -27,6 +27,8 @@ This creates the ThreadProfile object with default properties.  Create it first,
 ## Make Helix Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/MakeHelix.png" alt="make helix"><br/>
 The Make Helix command creates a Helix and sets its Pitch property to match the Pitch property of the ThreadProfile object.  This property is linked parametrically, thus any change to the ThreadProfile.Pitch property will also cause the Helix.Pitch property to update itself.  We also set the Helix.Height property to ThreadProfile.Pitch * ThreadProfile.ThreadCount, thus ensuring the Helix.Height property is such that the thread produced in the sweep will have Thread Count threads.  This is also parametrically linked.  Another thing that is done is the Helix.Placement property is copied from the ThreadProfile.Placement, thus the Helix, when created, will be positioned with the ThreadProfile object, but note that this placement property is not parametrically linked.<br/>
+<br/>
+If there exists an active Part Design body when the helix is created, then a shapebinder will be created and placed in the active body, and the helix will be hidden.<br/>
 
 ## Open Online Calculator Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/OpenOnlineCalculator.png" alt="open online calculator"><br/>
