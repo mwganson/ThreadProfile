@@ -49,10 +49,14 @@ What is this?  This is a property of the underlying BSpline object.  This is rea
 This is the version of the ThreadProfile workbench used to create the ThreadProfile object, not the version of the ThreadProfile workbench currently installed.<br/>
 ## Thread Count
 When a Helix is created using the Make Helix command the Height property of the Helix is set to a height such that Thread Count number of threads will be created.
+## Presets
+These are some presets I added to version 1.30 (likely to be expanded some in future versions).  I'm not entirely sure how accurate the data is.  Do not blindly rely on it.  You should still lookup the minimum and maximum minor diamters for your desired fit tolerance.  If you are
+modeling both the internal and the external threads for a project it is a good idea to take cross sections of both so you can inspect the fit on the screen.<br/>
 
 ## FAQ
 * Why is there a line running up the thread?<br/>
-** This is the BSpline's seamline.  If you Pad / Extrude the profile you can see this seamline as a straight edge, similar to what you see in cylinders and extruded / padded circles.<br/>
+** There are actually 2 lines.  One is is the BSpline's seamline.  If you Pad / Extrude the profile you can see this seamline as a straight edge, similar to what you see in cylinders and extruded / padded circles.
+The other is a set of concentric rings and I have no idea what they are or how they got there.<br/>
 * Is it possible to access this via Python scripting?<br/>
 ** Yes.  Use:<br/>
 <br/>
@@ -64,6 +68,9 @@ These parameters are currently (subject to change) supported: minor_diameter=4.8
 The internal_data and external_data list properties define the radius of the ThreadProfile object at the various angles around the circumference.  There are 720 points.  Each point is the x-coordinate of a thread profile sketched on the xz plane. The first element in the list is the x-coordinate at z=1/720 degrees, then z=2/720 degrees, etc.  Don't worry, you don't need to include these parameters.  The default used is for the standard Metric M profile.  When the ThreadProfile is created the data points are used as such: each element is taken, then added to it the minor radius + pitch * element value for the x-coordinate.  To get the y-coordinate we use the current element index / 720.  We use the math.cos() and math.sin() functions, but let's not get too bogged down here.  You can view the source code for more details.<br/>
 
 #### Release notes:<br/>
+* 2019.07.25 (version 1.30)<br/>
+** Added presets
+** Changed variable to reflect there are 719 (not 720) points used to make the ThreadProfile BSpline
 * 2019.07.23 (version 1.23)<br/>
 ** If there is an active part design body when the helix is created, make a shapebinder for it and hide the helix
 ** Put the helix into the active Part container if one exists

@@ -28,9 +28,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2019.07.23"
-__version__ = "1.23"
-version = 1.23
+__date__    = "2019.07.24"
+__version__ = "1.30"
+version = 1.30
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -71,10 +71,14 @@ class _ThreadProfile(_DraftObject):
         obj.addProperty("App::PropertyStringList", "Instructions", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Instructions")).Instructions=[\
 "Expand this with the ... button to view instructions",\
 "Sweep this object along a helix of the same pitch to produce your thread.",\
-"Can be dragged and dropped into Part Design as you would a sketch.",\
+"It is recommended to make the helix in the ThreadProfile workbench.",\
+"If there is an active Body the ThreadProfile object will be put into it.,"\
+"If not it can be dragged and dropped into the body later.",\
+"If there is an active Body when the helix is made there will be made a ShapeBinder for it",\
 "For internal threads you will need to cut the Sweep object out of a cylinder, or if using Part Design sweep it as a Subtractive Pipe.",\
 "Always use Frenet mode",\
-"The Minor Diameter is *NOT* the same as the Nominal Diameter.  You need to lookup the correct Minor Diameter to use for the desired Nominal Diameter and Pitch for the desired fit tolerance."
+"I have provided some presets, but it is possible there could be some errors.  Double check for mission critical applications.",\
+"Also, the tolerances might be different from what you wish to have.  I believe the internal minor diameters are all minimum and the external are all maximum.",\
 ]
         obj.Quality = (1,1,12,1) #1 default, 1 minimum, 12 max, 1 step size
         obj.setEditorMode("internal_data", 2) #0 = normal, 1 = readonly, 2 = hidden
@@ -87,6 +91,272 @@ class _ThreadProfile(_DraftObject):
         obj.MakeFace = getParam("fillmode",True)
         obj.Closed = True
         obj.Points = []
+
+        #metric course
+        self.thread_data=[
+        ['Select a preset',1.0,5.0,5.0],
+        ['Garden Hose NHR',0.08696*25.4,0.9495*25.4,0.9720*25.4],
+        ['M1 Course',0.25,0.693,0.729],
+        ['M1.1 Course',0.25,0.793,0.829],
+        ['M1.2 Course',0.25,0.893,0.929],
+        ['M1.4 Course',0.30,1.032,1.075],
+        ['M1.6 Course',0.35,1.171,1.221],
+        ['M1.8 Course',0.35,1.371,1.421],
+        ['M2 Course',0.40,1.509,1.567],
+        ['M2.2 Course',0.45,1.648,1.713],
+        ['M2.5 Course',0.45,1.948,2.013],
+        ['M3 Course',0.50,2.387,2.459],
+        ['M3.5 Course',0.60,2.764,2.850],
+        ['M4 Course',0.70,3.141,3.242],
+        ['M4.5 Course',0.75,3.580,3.688],
+        ['M5 Course',0.80,4.019,4.134],
+        ['M6 Course',1.00,4.773,4.917],
+        ['M7 Course',1.00,5.773,5.917],
+        ['M8 Course',1.25,6.466,6.647],
+        ['M9 Course',1.25,7.466,7.647],
+        ['M10 Course',1.50,8.160,8.376],
+        ['M11 Course',1.50,9.160,9.376],
+        ['M12 Course',1.75,9.853,10.106],
+        ['M14 Course',2.00,11.546,11.835],
+        ['M16 Course',2.00,13.546,13.835],
+        ['M18 Course',2.50,14.933,15.394],
+        ['M20 Course',2.50,16.933,17.294],
+        ['M22 Course',2.50,18.933,19.294],
+        ['M24 Course',3.00,20.319,20.752],
+        ['M27 Course',3.00,23.319,23.752],
+        ['M30 Course',3.50,25.706,26.211],
+        ['M33 Course',3.50,28.706,29.211],
+        ['M36 Course',4.00,31.093,31.670],
+        ['M39 Course',4.00,34.093,34.670],
+        ['M42 Course',4.50,36.479,37.129],
+        ['M45 Course',4.50,39.479,40.129],
+        ['M48 Course',5.00,41.866,42.857],
+        ['M52 Course',5.00,45.866,46.587],
+        ['M56 Course',5.50,49.252,50.046],
+        ['M60 Course',5.50,53.252,54.046],
+        ['M64 Course',6.00,56.639,57.505],
+        ['M68 Course',6.00,60.639,61.505],
+        ['M1 Fine',0.20,0.755,0.783],
+        ['M1.1 Fine',0.20,0.855,0.883],
+        ['M1.2 Fine',0.20,0.955,0.983],
+        ['M1.4 Fine',0.20,1.155,1.183],
+        ['M1.6 Fine',0.20,1.355,1.383],
+        ['M1.8 Fine',0.20,1.555,1.583],
+        ['M2 Fine',0.25,1.693,1.729],
+        ['M2.2 Fine',0.25,1.893,1.929],
+        ['M2.5 Fine',0.35,2.071,2.121],
+        ['M3 Fine',0.35,2.571,2.621],
+        ['M3.5 Fine',0.35,3.071,3.121],
+        ['M4 Fine',0.50,3.387,3.459],
+        ['M4.5 Fine',0.50,3.887,3.959],
+        ['M5 Fine',0.50,4.387,4.459],
+        ['M5.5 Fine',0.50,4.887,4.959],
+        ['M6 Fine',0.75,5.080,5.188],
+        ['M7 Fine',0.75,6.080,6.188],
+        ['M8 Fine',0.75,7.080,7.188],
+        ['M8 Fine',1.00,6.773,6.917],
+        ['M9 Fine',0.75,8.080,8.188],
+        ['M9 Fine',1.00,7.773,7.917],
+        ['M10 Fine',0.75,9.080,9.188],
+        ['M10 Fine',1.00,8.773,8.917],
+        ['M10 Fine',1.25,8.466,8.647],
+        ['M11 Fine',0.75,10.080,10.188],
+        ['M11 Fine',1.00,9.773,9.917],
+        ['M12 Fine',1.00,10.773,10.917],
+        ['M12 Fine',1.25,10.466,10.647],
+        ['M12 Fine',1.50,10.160,10.376],
+        ['M14 Fine',1.00,12.773,12.917],
+        ['M14 Fine',1.25,12.466,12.647],
+        ['M14 Fine',1.50,12.160,12.376],
+        ['M15 Fine',1.00,13.773,13.917],
+        ['M15 Fine',1.50,13.160,13.376],
+        ['M16 Fine',1.00,14.773,14.917],
+        ['M16 Fine',1.50,14.160,14.376],
+        ['M17 Fine',1.00,15.773,15.917],
+        ['M17 Fine',1.50,15.160,15.376],
+        ['M18 Fine',1.00,16.773,16.917],
+        ['M18 Fine',1.50,16.160,16.376],
+        ['M18 Fine',2.00,15.546,15.835],
+        ['M20 Fine',1.00,18.773,18.917],
+        ['M20 Fine',1.50,18.160,18.376],
+        ['M20 Fine',2.00,17.546,17.835],
+        ['M22 Fine',1.00,20.773,20.917],
+        ['M22 Fine',1.50,20.160,20.376],
+        ['M22 Fine',2.00,19.546,19.835],
+        ['M24 Fine',1.00,22.773,22.917],
+        ['M24 Fine',1.50,22.160,22.376],
+        ['M24 Fine',2.00,21.546,21.835],
+        ['M25 Fine',1.00,23.773,23.917],
+        ['M25 Fine',1.50,23.160,23.376],
+        ['M25 Fine',2.00,22.546,22.835],
+        ['M27 Fine',1.00,25.773,25.917],
+        ['M27 Fine',1.50,25.160,25.376],
+        ['M27 Fine',2.00,24.546,24.835],
+        ['M28 Fine',1.00,26.773,26.917],
+        ['M28 Fine',1.50,26.160,26.376],
+        ['M28 Fine',2.00,25.546,25.835],
+        ['M30 Fine',1.00,28.773,28.917],
+        ['M30 Fine',1.50,28.160,28.376],
+        ['M30 Fine',2.00,27.546,27.835],
+        ['M30 Fine',3.00,26.319,26.752],
+        ['M32 Fine',1.50,30.160,30.376],
+        ['M32 Fine',2.00,29.546,29.835],
+        ['M33 Fine',1.50,31.160,31.376],
+        ['M33 Fine',2.00,30.546,30.835],
+        ['M33 Fine',3.00,29.319,29.752],
+        ['M35 Fine',1.50,33.160,33.376],
+        ['M35 Fine',2.00,32.546,32.835],
+        ['M36 Fine',1.50,34.160,34.376],
+        ['M36 Fine',2.00,33.546,33.835],
+        ['M36 Fine',3.00,32.319,32.752],
+        ['M39 Fine',1.50,37.160,37.376],
+        ['M39 Fine',2.00,36.546,36.835],
+        ['M39 Fine',3.00,35.319,35.752],
+        ['M40 Fine',1.50,38.160,38.376],
+        ['M40 Fine',2.00,37.546,37.835],
+        ['M40 Fine',3.00,36.619,36.752],
+        ['M42 Fine',1.50,40.160,40.376],
+        ['M42 Fine',2.00,39.546,39.835],
+        ['M42 Fine',3.00,38.319,38.752],
+        ['M42 Fine',4.00,37.093,37.670],
+        ['M45 Fine',1.50,43.160,43.376],
+        ['M45 Fine',2.00,42.546,42.835],
+        ['M45 Fine',3.00,41.319,41.752],
+        ['M45 Fine',4.00,40.093,40.670],
+        ['M48 Fine',1.50,46.160,46.376],
+        ['M48 Fine',2.00,45.546,45.835],
+        ['M48 Fine',3.00,44.319,44.752],
+        ['M48 Fine',4.00,43.093,43.670],
+        ['M50 Fine',1.50,48.160,48.376],
+        ['M50 Fine',2.00,47.546,47.835],
+        ['M50 Fine',3.00,46.319,46.752],
+        ['M52 Fine',1.50,50.160,50.376],
+        ['M52 Fine',2.00,49.546,49.835],
+        ['M52 Fine',3.00,48.319,48.752],
+        ['M52 Fine',4.00,47.093,47.670],
+        ['M55 Fine',1.50,53.160,53.376],
+        ['M55 Fine',2.00,52.546,52.835],
+        ['M55 Fine',3.00,51.319,51.752],
+        ['M55 Fine',4.00,50.093,50.670],
+        ['M56 Fine',1.50,54.160,54.376],
+        ['M56 Fine',2.00,43.546,53.835],
+        ['M56 Fine',3.00,52.319,52.752],
+        ['M56 Fine',4.00,51.903,51.670],
+        ['M58 Fine',1.50,56.160,56.376],
+        ['M58 Fine',2.00,55.546,55.835],
+        ['M58 Fine',3.00,54.319,54.752],
+        ['M58 Fine',4.00,53.093,53.670],
+        ['M60 Fine',1.50,58.160,58.376],
+        ['M60 Fine',2.00,57.546,57.835],
+        ['M60 Fine',3.00,56.319,56.752],
+        ['M60 Fine',4.00,55.093,55.670],
+        ['M62 Fine',1.50,60.160,60.376],
+        ['M62 Fine',2.00,59.546,59.835],
+        ['M62 Fine',3.00,58.319,58.752],
+        ['M62 Fine',4.00,57.093,57.670],
+        ['M64 Fine',1.50,62.160,62.376],
+        ['M64 Fine',2.00,61.546,61.835],
+        ['M64 Fine',3.00,60.319,60.752],
+        ['M64 Fine',4.00,59.093,59.670],
+        ['M65 Fine',1.50,63.160,63.376],
+        ['M65 Fine',2.00,62.546,62.835],
+        ['M65 Fine',3.00,61.319,61.752],
+        ['M65 Fine',4.00,60.093,60.670],
+        ['M68 Fine',1.50,66.160,66.376],
+        ['M68 Fine',2.00,65.546,65.835],
+        ['M68 Fine',3.00,64.319,64.752],
+        ['M68 Fine',4.00,63.093,63.670],
+        ['M70 Fine',1.50,68.160,68.376],
+        ['M70 Fine',2.00,67.546,67.835],
+        ['M70 Fine',3.00,66.319,66.752],
+        ['M70 Fine',4.00,65.093,65.670],
+        ['M70 Fine',6.00,62.639,63.505],
+        ['M72 Fine',1.50,70.160,70.376],
+        ['M72 Fine',2.00,69.546,69.835],
+        ['M72 Fine',3.00,68.319,68.752],
+        ['M72 Fine',4.00,67.093,67.670],
+        ['M72 Fine',6.00,64.639,65.505],
+        ['M75 Fine',1.50,73.160,73.376],
+        ['M75 Fine',2.00,72.546,72.835],
+        ['M75 Fine',3.00,71.319,71.752],
+        ['M75 Fine',4.00,70.093,70.670],
+        ['M75 Fine',6.00,67.639,68.505],
+        ['M76 Fine',1.50,74.160,74.376],
+        ['M76 Fine',2.00,73.546,73.835],
+        ['M76 Fine',3.00,72.319,72.752],
+        ['M76 Fine',4.00,71.093,71.670],
+        ['M76 Fine',6.00,68.639,69.505],
+        ['M80 Fine',1.50,78.160,78.376],
+        ['M80 Fine',2.00,77.546,77.835],
+        ['M80 Fine',3.00,76.319,76.752],
+        ['M80 Fine',4.00,75.093,75.670],
+        ['M80 Fine',6.00,72.639,73.505],
+        ['M85 Fine',2.00,82.546,82.535],
+        ['M85 Fine',3.00,81.319,81.752],
+        ['M85 Fine',4.00,80.093,80.670],
+        ['M85 Fine',6.00,77.639,78.505],
+        ['M90 Fine',2.00,87.546,87.835],
+        ['M90 Fine',3.00,86.319,86.752],
+        ['M90 Fine',4.00,85.093,85.670],
+        ['M90 Fine',6.00,82.639,83.505],
+        ['M95 Fine',2.00,92.546,92.835],
+        ['M95 Fine',3.00,91.319,91.752],
+        ['M95 Fine',4.00,90.093,90.670],
+        ['M95 Fine',6.00,87.639,88.505],
+        ['M100 Fine',2.00,97.546,97.835],
+        ['M100 Fine',3.00,96.319,96.752],
+        ['M100 Fine',4.00,95.093,95.670],
+        ['M100 Fine',6.00,92.639,93.505],
+        ['1/4 in-20 UNC',25.4*0.0500,25.4*0.1887,25.4*0.1959],
+        ['5/16 in-18 UNC UNC',25.4*0.0556,25.4*0.2443,25.4*0.2524],
+        ['3/8 in-16 UNC UNC',25.4*0.0625,25.4*0.2983,25.4*0.3073],
+        ['7/16 in-14 UNC',25.4*0.0714,25.4*0.3499,25.4*0.3602],
+        ['1/2 in-13 UNC',25.4*0.0769,25.4*0.4056,25.4*0.4167],
+        ['9/16 in-12 UNC',25.4*0.0833,25.4*0.4603,25.4*0.4723],
+        ['5/8 in-11 UNC',25.4*0.0909,25.4*0.5135,25.4*0.5266],
+        ['3/4 in-10 UNC',25.4*0.1000,25.4*0.6273,25.4*0.6417],
+        ['7/8 in-9 UNC',25.4*0.1111,25.4*0.7387,25.4*0.7547],
+        ['1 in-8 UNC',25.4*0.1250,25.4*0.8466,25.4*0.8647],
+        ['1 1/8 in-7 UNC',25.4*0.1429,25.4*0.9497,25.4*0.9704],
+        ['1 1/4 in-7 UNC',25.4*0.1429,25.4*1.0747,25.4*1.0954],
+        ['1 3/8 in-6 UNC',25.4*0.1667,25.4*1.1705,25.4*1.1946],
+        ['1 1/2 in-6 UNC',25.4*0.1667,25.4*1.2955,25.4*1.3196],
+        ['1 3/4 in-5 UNC',25.4*0.2000,25.4*1.5046,25.4*1.5335],
+        ['2 in-4 1/2 UNC',25.4*0.2222,25.4*1.7274,25.4*1.7594],
+        ['2 1/4 in-4 1/2 UNC',25.4*0.2222,25.4*1.9774,25.4*2.0094],
+        ['2-1/2 in-4 UNC',25.4*0.2500,25.4*2.1992,25.4*2.229 ],
+        ['2-3/4 in-4 UNC',25.4*0.2500,25.4*2.4491,25.4*2.479],
+        ['3 in-4 UNC',25.4*0.2500,25.4*2.699,25.4*2.729],
+        ['3-1/4 in-4 UNC',25.4*0.2500,25.4*2.949,25.4*2.979],
+        ['3-1/2 in-4 UNC',25.4*0.2500,25.4*3.199,25.4*3.229 ],
+        ['3-3/4 in-4 UNC',25.4*0.2500,25.4*3.4489,25.4*3.479 ],
+        ['4 in-4 UNC',25.4*0.2500,25.4*3.6989,25.4*3.729],
+        ['1/4 in-28 UNF UNF',25.4*0.0357,25.4*0.2062,25.4*0.2113],
+        ['5/16 in-24 UNF',25.4*0.0417,25.4*0.2614,25.4*0.2674],
+        ['3/8 in-24 UNF',25.4*0.0417,25.4*0.3239,25.4*0.3299],
+        ['7/16 in-20 UNF',25.4*0.0500,25.4*0.3762,25.4*0.3834],
+        ['1/2 in-20 UNF',25.4*0.0500,25.4*0.4387,25.4*0.4459],
+        ['9/16 in-18 UNF',25.4*0.0556,25.4*0.4943,25.4*0.5024],
+        ['5/8 in-18 UNF',25.4*0.0556,25.4*0.5568,25.4*0.5649],
+        ['3/4 in-16 UNF',25.4*0.0625,25.4*0.6733,25.4*0.6823],
+        ['7/8 in-14 UNF',25.4*0.0714,25.4*0.7874,25.4*0.7977],
+        ['1 in-12 UNF',25.4*0.0714,25.4*0.8978,25.4*0.9098],
+        ['1 in-14 UNF',25.4*0.0714,25.4*0.9132,25.4*0.923],
+        ['1 1/4 in-12 UNF',25.4*0.0833,25.4*1.0228,25.4*1.0348],
+        ['1 1/8 in-12 UNF',25.4*0.0833,25.4*1.1478,25.4*1.1598],
+        ['1 3/8 in-12 UNF',25.4*0.0833,25.4*1.2728,25.4*1.2848],
+        ['1 1/2 in-12 UNF',25.4*0.0833,25.4*1.3978,25.4*1.4098]]
+ 
+        self.presets=[]
+        for td in self.thread_data:
+            preset_name = td[0]
+            if "M" in preset_name:
+               preset_name += " " + str(td[1])
+            self.presets.append(preset_name)
+           
+        obj.addProperty("App::PropertyEnumeration", "Presets", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Some presets")).Presets=self.presets
+        
+
 
         self.assureProperties(obj)
 
@@ -133,7 +403,7 @@ class _ThreadProfile(_DraftObject):
         else:
             our_data = obj.internal_data
         for ii in range(0, len(our_data),step):
-            alpha += math.pi * 2 / 720 * step
+            alpha += math.pi * 2 / len(our_data) * step
             od = our_data[ii]
             radius = minor_diameter / 2 + od * pitch
             x = math.cos(alpha) * radius
@@ -149,6 +419,16 @@ class _ThreadProfile(_DraftObject):
                 fp.Parameterization = 0.
             if fp.Parameterization > 1.0:
                 fp.Parameterization = 1.0
+        if prop == "Presets" or prop == "InternalOrExternal":
+            if hasattr(fp,"Presets") and hasattr(self,"presets"):
+                preset_string = getattr(fp,"Presets")
+                idx = self.presets.index(preset_string)
+                if idx != 0:
+                    fp.Pitch = self.thread_data[idx][1]
+                    if "External" in fp.InternalOrExternal:
+                        fp.MinorDiameter = self.thread_data[idx][2]
+                    else:
+                        fp.MinorDiameter = self.thread_data[idx][3]
 
     def execute(self, obj):
         obj.Points = self.makePoints(obj)
