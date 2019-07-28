@@ -57,6 +57,8 @@ modeling both the internal and the external threads for a project it is a good i
 * Why is there a line running up the thread?<br/>
 ** There are actually 2 lines.  One is is the BSpline's seamline.  If you Pad / Extrude the profile you can see this seamline as a straight edge, similar to what you see in cylinders and extruded / padded circles.
 The other is a set of concentric rings and I have no idea what they are or how they got there.<br/>
+* My internal threads are always external.  What am I doing wrong?<br/>
+** Use subtractive pipe in Part design to cut the internal thread out of an existing shape, e.g. a Pad.  In Part workbench use the Sweep object as a cutting tool to cut it out of an existing shape, e.g. an extruded hexagon.  (Ensure you have selected "Internal" in the "Internal Or External" ThreadProfile property when making internal threads.)<br/>
 * Is it possible to access this via Python scripting?<br/>
 ** Yes.  Use:<br/>
 <br/>
@@ -66,8 +68,7 @@ ThreadProfileCmd.makeThreadProfile()<br/>
 These parameters are currently (subject to change) supported: minor_diameter=4.891,pitch=1,closed=True,placement=None,face=None,support=None,internal_or_external="External",internal_data=[],external_data=[], thread_count=10.  (But I think face will always be true.)<br/>
 <br/>
 The internal_data and external_data list properties define the radius of the ThreadProfile object at the various angles around the circumference.  There are 720 points.  Each point is the x-coordinate of a thread profile sketched on the xz plane. The first element in the list is the x-coordinate at z=1/720 degrees, then z=2/720 degrees, etc.  Don't worry, you don't need to include these parameters.  The default used is for the standard Metric M profile.  When the ThreadProfile is created the data points are used as such: each element is taken, then added to it the minor radius + pitch * element value for the x-coordinate.  To get the y-coordinate we use the current element index / 720.  We use the math.cos() and math.sin() functions, but let's not get too bogged down here.  You can view the source code for more details.<br/>
-* My internal threads are always external.  What am I doing wrong?<br/>
-** Use subtractive pipe in Part design to cut the internal thread out of an existing shape, e.g. a Pad.  In Part workbench use the Sweep object as a cutting tool to cut it out of an existing shape, e.g. an extruded hexagon.  (Ensure you have selected "Internal" in the "Internal Or External" ThreadProfile property when making internal threads.)
+
 
 #### Release notes:<br/>
 * 2019.07.27 (version 1.31)<br/>
