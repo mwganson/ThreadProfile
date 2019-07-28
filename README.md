@@ -26,7 +26,7 @@ This creates the ThreadProfile object with default properties.  Create it first,
 
 ## Make Helix Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/MakeHelix.png" alt="make helix"><br/>
-The Make Helix command creates a Helix and sets its Pitch property to match the Pitch property of the ThreadProfile object.  This property is linked parametrically, thus any change to the ThreadProfile.Pitch property will also cause the Helix.Pitch property to update itself.  We also set the Helix.Height property to ThreadProfile.Pitch * ThreadProfile.ThreadCount, thus ensuring the Helix.Height property is such that the thread produced in the sweep will have Thread Count threads.  This is also parametrically linked.  Another thing that is done is the Helix.Placement property is copied from the ThreadProfile.Placement, thus the Helix, when created, will be positioned with the ThreadProfile object, but note that this placement property is not parametrically linked.<br/>
+The Make Helix command creates a Helix and sets its Pitch property to match the Pitch property of the ThreadProfile object.  This property is linked parametrically, thus any change to the ThreadProfile.Pitch property will also cause the Helix.Pitch property to update itself.  We also set the Helix.Height property to ThreadProfile.Pitch * ThreadProfile.ThreadCount, thus ensuring the Helix.Height property is such that the thread produced in the sweep will have Thread Count threads.  This is also parametrically linked.  Another thing that is done is the Helix.Placement property is copied from the ThreadProfile.Placement, thus the Helix, when created, will be positioned with the ThreadProfile object.  As of version 1.31 this placement property is now parametrically linked.  There is a settings option to change this to only put the Helix where the ThreadProfile is on creation of the helix.<br/>
 <br/>
 If there exists an active Part Design body when the helix is created, then a shapebinder will be created and placed in the active body, and the helix will be hidden.<br/>
 
@@ -68,6 +68,8 @@ These parameters are currently (subject to change) supported: minor_diameter=4.8
 The internal_data and external_data list properties define the radius of the ThreadProfile object at the various angles around the circumference.  There are 720 points.  Each point is the x-coordinate of a thread profile sketched on the xz plane. The first element in the list is the x-coordinate at z=1/720 degrees, then z=2/720 degrees, etc.  Don't worry, you don't need to include these parameters.  The default used is for the standard Metric M profile.  When the ThreadProfile is created the data points are used as such: each element is taken, then added to it the minor radius + pitch * element value for the x-coordinate.  To get the y-coordinate we use the current element index / 720.  We use the math.cos() and math.sin() functions, but let's not get too bogged down here.  You can view the source code for more details.<br/>
 
 #### Release notes:<br/>
+* 2019.07.27 (version 1.31)<br/>
+** Helix placement now linked parametrically to ThreadProfile placement, can be disabled in settings.
 * 2019.07.25 (version 1.30)<br/>
 ** Added presets
 ** Changed variable to reflect there are 719 (not 720) points used to make the ThreadProfile BSpline

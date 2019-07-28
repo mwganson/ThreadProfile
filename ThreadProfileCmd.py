@@ -28,9 +28,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2019.07.24"
-__version__ = "1.30"
-version = 1.30
+__date__    = "2019.07.27"
+__version__ = "1.31"
+version = 1.31
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -542,16 +542,23 @@ class ThreadProfileSettingsCommandClass(object):
         from PySide import QtGui
         window = QtGui.QApplication.activeWindow()
         pg = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/ThreadProfile")
+        pg.SetBool("LinkHelixPlacementParametrically", True)
         keep = pg.GetBool('KeepToolbar',True)
         mostRecentTypesLength = pg.GetInt('mruLength',5)
-        items=["Keep the toolbar active","Do not keep the toolbar active"]
+        items=["Keep the toolbar active","Do not keep the toolbar active","Link helix placement parametrically", "Do not link helix placement parametrically","Cancel"]
         item,ok = QtGui.QInputDialog.getItem(window,'ThreadProfile','Settings\n\nSelect the settings option\n',items,0,False)
-        if ok and item == items[0]:
+        if ok and item == items[-1]:
+            return
+        elif ok and item == items[0]:
             keep = True
             pg.SetBool('KeepToolbar', keep)
         elif ok and item==items[1]:
             keep = False
             pg.SetBool('KeepToolbar', keep)
+        elif ok and item == items[2]:
+            pg.SetBool('LinkHelixPlacementParametrically', True)
+        elif ok and item == items[3]:
+            pg.SetBool('LinkHelixPlacementParametrically', False)
         return
    
     def IsActive(self):
@@ -583,7 +590,17 @@ class ThreadProfileMakeHelixCommandClass(object):
         getattr(doc,name).Label = name
         getattr(doc,name).setExpression("Pitch",self.Name+'.Pitch')
         getattr(doc,name).setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch')
-        getattr(doc,name).Placement=self.Placement
+        pg = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/ThreadProfile")
+        if pg.GetBool("LinkHelixPlacementParametrically", True):
+            getattr(doc,name).setExpression('Placement.Base.x',self.Name+'.Placement.Base.x')
+            getattr(doc,name).setExpression('Placement.Base.y',self.Name+'.Placement.Base.y')
+            getattr(doc,name).setExpression('Placement.Base.z',self.Name+'.Placement.Base.z')
+            getattr(doc,name).setExpression('Placement.Rotation.Angle',self.Name+'.Placement.Rotation.Angle')
+            getattr(doc,name).setExpression('Placement.Rotation.Axis.x',self.Name+'.Placement.Rotation.Axis.x')
+            getattr(doc,name).setExpression('Placement.Rotation.Axis.y',self.Name+'.Placement.Rotation.Axis.y')
+            getattr(doc,name).setExpression('Placement.Rotation.Axis.z',self.Name+'.Placement.Rotation.Axis.z')
+        else:
+            getattr(doc,name).Placement=self.Placement
         body=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("pdbody")
         part=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("part")
         if part:
