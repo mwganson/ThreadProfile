@@ -20,9 +20,17 @@ There are a number of advantages to using ThreadProfile objects in your threads:
 ## Details
 The ThreadProfile object is really just a glorified rebranded Draft BSpline object.  In fact, the template code for producing it was unabashedly copied directly from the Draft workbench for use as a starting point, which I then modified to meet my needs.  In particular, the necessary properties, such as Pitch and Minor Diameter were added, along with the code necessary to produce the desired BSpline object.<br/>
 
-## Create Object Command
+## Create V thread profile Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateObject.png" alt="create object"><br/>
-This creates the ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.  If there is an active Part Design Body, the object will be placed inside it.  Failing that, if there is an active Part container the object will be placed into that.
+This creates the V thread ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.  There are a number of presets available, but you should double-check these by taking a cross-section of both parts to check the fit, then adjust the minor diameter accordingly.  If there is an active Part Design Body, the object will be placed inside it.  Failing that, if there is an active Part container the object will be placed into that.
+
+## Create Buttress thread profile Command
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateButtressObject.png" alt="create object"><br/>
+This creates the Buttress thread ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.  If there is an active Part Design Body, the object will be placed inside it.  Failing that, if there is an active Part container the object will be placed into that.<br/>
+<br/>
+These are ANSI B1.9-1973 (R2007), Class 2 -- Standard Grade,  7 degree / 45 degree flat-rooted buttress threads.  (Class 3 -- Precision Grade would have 2/3 the tolerance of these for a tighter fit.)  The tolerance is based on a thread length engagement of 10 threads.  Shorter engagements could use a tighter fit and still work, longer engagements might require more tolerance.  You can adjust the tolerance by adjusting the minor diameter after selecting one of the presets.  Make the external minor diameter larger and the internal minor diameter smaller if you want a tighter fit, and vice versa for a looser fit.<br/>
+<br/>
+There are other diameter / pitch combinations in the standard than are provided in the presets.  The ones provided are only the recommended combinations.  You can set the minor diameter and pitch to any values you want, but you'll need to work out the tolerances for yourself.<br/>
 
 ## Make Helix Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/MakeHelix.png" alt="make helix"><br/>
@@ -62,10 +70,12 @@ The other is a set of concentric rings and I have no idea what they are or how t
 * Is it possible to access this via Python scripting?<br/>
 ** Yes.  Use:<br/>
 <br/>
-import ThreadProfileCmd<br/>
-ThreadProfileCmd.ThreadProfileCreateObjectCommandClass().makeThreadProfile()<br/>
-or<br/>
-ThreadProfileCmd.ThreadProfileCreateButtressObjectCommandClass().makeButtressThreadProfile()<br/>
+<pre>
+import ThreadProfileCmd
+ThreadProfileCmd.ThreadProfileCreateObjectCommandClass().makeThreadProfile()
+or
+ThreadProfileCmd.ThreadProfileCreateButtressObjectCommandClass().makeButtressThreadProfile()
+</pre>
 <br/>
 Parameters: <br/>
 name="BThreadProfile",internal_data = internal_buttress_data, external_data = external_buttress_data, presets = buttress_presets_data,minor_diameter=buttress_presets_data[13][2],pitch=25.4/10,internal_or_external="External",thread_count=10<br/>
