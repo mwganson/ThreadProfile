@@ -30,8 +30,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2019.07.31"
-__version__ = "1.40"
-version = 1.40
+__version__ = "1.41"
+version = 1.41
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -345,13 +345,15 @@ class ThreadProfileOpenOnlineCalculatorCommandClass(object):
  
     def Activated(self):
         import webbrowser
-        items = ["Open online metric calculator", "Open online unified inch calculator", "Cancel"]
+        items = ["Open online metric calculator", "Open online unified inch calculator", "Open online ANSI buttress thread calculator","Cancel"]
         window = QtGui.QApplication.activeWindow()
         item,ok = QtGui.QInputDialog.getItem(window,'ThreadProfile','Open online calculator in default browser?',items,0,False)
         if ok and item == items[0]:
             webbrowser.open('https://www.amesweb.info/Screws/IsoMetricScrewThread.aspx')
         elif ok and item == items[1]:
             webbrowser.open('https://www.amesweb.info/Screws/AsmeUnifiedInchScrewThread.aspx')
+        elif ok and item == items[2]:
+            webbrowser.open('https://www.amesweb.info/Screws/ButtressInchScrewThreads.aspx')
 
         return
    
