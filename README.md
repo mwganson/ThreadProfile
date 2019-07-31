@@ -40,7 +40,7 @@ If there exists an active Part Design body when the helix is created, then a sha
 
 ## Open Online Calculator Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/OpenOnlineCalculator.png" alt="open online calculator"><br/>
-Opens on online calculator either for the metric sizes or for the ANSI UN and UNR inch sizes in the default browser.  It is possible (I think) that FreeCAD might not have permission to do this.  If so, then it will likely fail.  Use the calculator to get the minor diameter for the thread you wish to make.  For inch sizes, the 2A and 2B tolerances are for the normal fit.  For metric sizes the 6g tolerance is for normal fit.  Typically there will be 2 minor diameters to select from: a minimum and a maximum.  If you make the internal thread a little bit smaller the fit will be tighter.  If you make the external thread a little bit smaller the fit will be looser.  A good way to check the fit is to make the nut and the screw at the same time, then use the Part workbench cross-section tool to check the fit.
+Opens on online calculator for the metric sizes or for the ANSI UN and UNR inch sizes or for the ANSI Buttress sizes in the default browser.  It is possible (I think) that FreeCAD might not have permission to do this.  If so, then it will likely fail.  Use the calculator to get the minor diameter for the thread you wish to make.  For inch sizes, the 2A and 2B tolerances are for the normal fit.  For Buttress threads class 2 is normal, class 3 is tighter fit.  For metric size v threads the 6g tolerance is for normal fit.  Typically there will be 2 minor diameters to select from: a minimum and a maximum.  If you make the internal thread a little bit smaller the fit will be tighter.  If you make the external thread a little bit smaller the fit will be looser.  A good way to check the fit is to make the nut and the screw at the same time, then use the Part workbench cross-section tool to check the fit.
 
 ## Quality Property
 The ThreadProfile object appears at first glance to be a simple circle, but it's not.  As mentioned above, it's a BSpline.  Think of it as a circle with a varying radius around the circumference.  For every degree there are 2 points used to define the curve, 720 points in all.  This is for Quality 1 profiles.  You can select a different Quality property for improved performance, but at the expense of lower quality profiles.  Quality 2 profiles use only every other point, in other words 360 points or 1 point per degree.  Quality 3 uses only every 3rd point, and so on, up to 12 Quality settings at this time (subject to change).<br/>
@@ -50,7 +50,8 @@ The ThreadProfile object appears at first glance to be a simple circle, but it's
 This is the pitch for the thread.  You also need to set this in the Helix Pitch property.  If you wish to make ANSI threads, such as 1/4-20, for example, you would set this value to 25.4/20 if you are in mm units or 1/20 if you are using inch units.  I keep FreeCAD in mm units, so I would use 25.4/20 for the Pitch for that thread.<br/>
 
 ## Minor Diameter
-This is the minor diameter of your thread.  This is *NOT* the nominal diameter.  You need to look this value up and use the one for your desired nominal diameter, pitch, and fit tolerance.  Here are links to online calculators for <a href="https://www.amesweb.info/Screws/AsmeUnifiedInchScrewThread.aspx">Unified Inch Screwthreads</a> and for <a href="https://www.amesweb.info/Screws/IsoMetricScrewThread.aspx">Metric</a>.<br/>  Note: the profile is for metric threads, but it's basically the same as the one for ANSI threads, only difference being the root is rounded in metric threads, which IMO is not a concern.<br/>
+This is the minor diameter of your thread.  This is *NOT* the nominal diameter.  You need to look this value up and use the one for your desired nominal diameter, pitch, and fit tolerance.  Here are links to online calculators for <a href="https://www.amesweb.info/Screws/AsmeUnifiedInchScrewThread.aspx">Unified Inch Screwthreads</a>, <a href="https://www.amesweb.info/Screws/IsoMetricScrewThread.aspx">Metric</a>, and for <a href="https://www.amesweb.info/Screws/ButtressInchScrewThreads.aspx">ANSI Buttress</a><br/>
+
 ## Continuity
 What is this?  This is a property of the underlying BSpline object.  This is readonly and is only included for informational purposes.  Normally, this should be C2 continuity.  You can read more about smoothness <a href="https://en.wikipedia.org/wiki/Smoothness">here</a>.<br/>
 ## Version
@@ -96,6 +97,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2019.07.31 (version 1.41)<br/>
+** Add online buttress calculator link<br/>
 * 2019.07.31 (version 1.40)<br/>
 ** Add Buttress thread support
 * 2019.07.27 (version 1.31)<br/>
