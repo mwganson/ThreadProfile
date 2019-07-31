@@ -63,14 +63,31 @@ The other is a set of concentric rings and I have no idea what they are or how t
 ** Yes.  Use:<br/>
 <br/>
 import ThreadProfileCmd<br/>
-ThreadProfileCmd.makeThreadProfile()<br/>
+ThreadProfileCmd.ThreadProfileCreateObjectCommandClass().makeThreadProfile()<br/>
+or<br/>
+ThreadProfileCmd.ThreadProfileCreateButtressObjectCommandClass().makeButtressThreadProfile()<br/>
 <br/>
-These parameters are currently (subject to change) supported: minor_diameter=4.891,pitch=1,closed=True,placement=None,face=None,support=None,internal_or_external="External",internal_data=[],external_data=[], thread_count=10.  (But I think face will always be true.)<br/>
+Parameters: <br/>
+name="BThreadProfile",internal_data = internal_buttress_data, external_data = external_buttress_data, presets = buttress_presets_data,minor_diameter=buttress_presets_data[13][2],pitch=25.4/10,internal_or_external="External",thread_count=10<br/>
+name is the name of the ThreadProfile object created.<br/>
+internal_data, external_data, presets are lists that could be used to create a custom profile type.<br/>
+minor_diameter is the minor diameter (we don't use nominal, only minor).  To calculate minor diameter this code is used:<br/>
+<br/><pre>
+        def cd(txt, tpi, nominal): #cd = calculate diameters
+            pitch = 25.4/tpi
+            length_of_engagement = 10 * pitch #10 * pitch, longer engagements should have more tolerance
+            nom = nominal * 25.4
+            minor = nom - 0.66271 * pitch
+            tolerance = 0.002 * (nom)**(1/3) + .00278 * length_of_engagement**(1/2) + 0.00854 * pitch**(1/2)
+            return[txt, pitch, minor - tolerance, minor + tolerance]
+</pre>
 <br/>
 The internal_data and external_data list properties define the radius of the ThreadProfile object at the various angles around the circumference.  There are 720 points.  Each point is the x-coordinate of a thread profile sketched on the xz plane. The first element in the list is the x-coordinate at z=1/720 degrees, then z=2/720 degrees, etc.  Don't worry, you don't need to include these parameters.  The default used is for the standard Metric M profile.  When the ThreadProfile is created the data points are used as such: each element is taken, then added to it the minor radius + pitch * element value for the x-coordinate.  To get the y-coordinate we use the current element index / 720.  We use the math.cos() and math.sin() functions, but let's not get too bogged down here.  You can view the source code for more details.<br/>
 
 
 #### Release notes:<br/>
+* 2019.07.31 (version 1.40)<br/>
+** Add Buttress thread support
 * 2019.07.27 (version 1.31)<br/>
 ** Helix placement now linked parametrically to ThreadProfile placement, can be disabled in settings.
 * 2019.07.25 (version 1.30)<br/>
