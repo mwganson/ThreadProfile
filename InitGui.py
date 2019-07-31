@@ -58,7 +58,7 @@ class ThreadProfileWorkbench(Workbench):
     def Initialize(self):
         "This function is executed when FreeCAD starts"
         import ThreadProfileCmd #needed files for FreeCAD commands
-        self.list = ["ThreadProfileCreateObject", "ThreadProfileMakeHelix", "ThreadProfileOpenOnlineCalculator", "ThreadProfileSettings"] # A list of command names created in the line above
+        self.list = ["ThreadProfileCreateObject", "ThreadProfileCreateButtressObject", "ThreadProfileMakeHelix", "ThreadProfileOpenOnlineCalculator", "ThreadProfileSettings"] # A list of command names created in the line above
         self.appendToolbar("ThreadProfile Commands",self.list[:-1]) # leave settings off toolbar
         self.appendMenu("&ThreadProfile",self.list) # creates a new menu
         #considered putting the menu inside the Edit menu, but decided against it
