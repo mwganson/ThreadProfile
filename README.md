@@ -96,6 +96,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2019.08.01 (version 1.41)<br/>
+** Fix bug where presets were not working after restarting and reloading file
 * 2019.07.31 (version 1.40)<br/>
 ** Add Buttress thread support
 * 2019.07.27 (version 1.31)<br/>
