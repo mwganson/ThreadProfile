@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2019.07.31"
-__version__ = "1.41"
-version = 1.41
+__date__    = "2019.08.01"
+__version__ = "1.42"
+version = 1.42
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -48,7 +48,6 @@ if FreeCAD.GuiUp:
 __dir__ = os.path.dirname(__file__)
 iconPath = os.path.join( __dir__, 'Resources', 'icons' )
 keepToolbar = False
-presets_data = {}
 
 class _ThreadProfile(_DraftObject):
     "The ThreadProfile object"
@@ -65,6 +64,7 @@ class _ThreadProfile(_DraftObject):
         obj.addProperty("App::PropertyFloatList","internal_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "Data used to construct internal thread"))
         obj.addProperty("App::PropertyFloatList","external_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "Data used to construct external thread"))
         obj.addProperty("App::PropertyStringList","preset_names","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "list of preset names"))
+        obj.addProperty("App::PropertyFloatList","presets_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property","list of pitches and diameters"))
         obj.addProperty("App::PropertyLength", "Pitch", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Pitch of the thread, use 25.4 / TPI if in mm mode else 1 / TPI to convert from threads per inch"))
         obj.addProperty("App::PropertyEnumeration", "InternalOrExternal", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Whether to make internal or external thread profile"))
         obj.InternalOrExternal=["Internal", "External"]
@@ -93,6 +93,7 @@ class _ThreadProfile(_DraftObject):
         obj.setEditorMode("Version", 1)
         obj.setEditorMode("Continuity", 1)
         obj.setEditorMode("preset_names", 2)
+        obj.setEditorMode("presets_data", 2)
         obj.MakeFace = getParam("fillmode",True)
         obj.Closed = True
         obj.Points = []
@@ -164,11 +165,11 @@ class _ThreadProfile(_DraftObject):
                 if preset_string in fp.preset_names:
                     idx = fp.preset_names.index(preset_string)
                     if idx != 0:
-                        fp.Pitch = presets_data[fp.Name][idx][1]
+                        fp.Pitch = fp.presets_data[idx*3+1]
                         if "External" in fp.InternalOrExternal:
-                            fp.MinorDiameter = presets_data[fp.Name][idx][2]
+                            fp.MinorDiameter = fp.presets_data[idx*3+2]
                         else:
-                            fp.MinorDiameter = presets_data[fp.Name][idx][3]
+                            fp.MinorDiameter = fp.presets_data[idx*3+3]
 
     def execute(self, obj):
         obj.Points = self.makePoints(obj)
@@ -396,7 +397,6 @@ class ThreadProfileCreateObjectCommandClass(object):
     def makeThreadProfile(self,name="VThreadProfile",minor_diameter=4.773,pitch=1,internal_or_external="External",internal_data=[],external_data=[],presets=[],thread_count=10):
         '''minor_diameter=4.891,pitch=1,closed=True,placement=None,face=None,support=None,internal_or_external="External",internal_data=[],external_data=[]): Creates a thread profile object
     that can be swept along a helix to produce a thread.  Code is based on Draft.makeBSpline()'''
-        global presets_data
         if not FreeCAD.ActiveDocument:
             FreeCAD.Console.PrintError("No active document. Aborting\n")
             return
@@ -424,7 +424,7 @@ class ThreadProfileCreateObjectCommandClass(object):
         obj.MinorDiameter = minor_diameter #M6x1 internal 6g tolerance class is default
 
         if len (presets) == 0:
-            presets_data[obj.Name]=[
+            tmp_presets_data=[
             ['V Thread Presets',0,0,0],
             ['Garden Hose NHR',0.08696*25.4,0.9495*25.4,0.9720*25.4],
             ['M1 Course',0.25,0.693,0.729],
@@ -678,9 +678,13 @@ class ThreadProfileCreateObjectCommandClass(object):
             ['1 3/8 in-12 UNF',25.4*0.0833,25.4*1.2728,25.4*1.2848],
             ['1 1/2 in-12 UNF',25.4*0.0833,25.4*1.3978,25.4*1.4098]]
         else:
-            presets_data[obj.Name] = presets
+            tmp_presets_data = presets
+        tmp=[]
+        for ii in range(0,len(tmp_presets_data)):
+            tmp.extend(tmp_presets_data[ii][1:]) #strip out string, only include pitch and both minor diameters
+        obj.presets_data = tmp
         preset_names=[]
-        for td in presets_data[obj.Name]:
+        for td in tmp_presets_data:
             preset_name = td[0]
             if "M" in preset_name:
                 preset_name += " " + str(td[1])
