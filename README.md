@@ -38,6 +38,15 @@ The Make Helix command creates a Helix and sets its Pitch property to match the 
 <br/>
 If there exists an active Part Design body when the helix is created, then a shapebinder will be created and placed in the active body, and the helix will be hidden.<br/>
 
+## Do Sweep Command
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/DoSweep.png" alt="do sweep"><br/>
+The Do Sweep command will perform the sweep for you.  To use it you must first select the ThreadProfile object to sweep and the helix (or ShapeBinder) to sweep it along, then activate the command either from the toolbar or menu.<br/>
+<br/>
+If a helix is selected, then the operation performed is a Part workbench Sweep, with solid = True and Frenet = True.  This happens even if there is an active body and even if the ThreadProfile object is in the active body.  If there is an active body and the ShapeBinder is selected, then an AdditivePipe is performed unless the InternalOrExternal property is set to "Internal", in which case the Part Design Subtractive Sweep is used.<br/>
+<br/>
+Be wary of coplanar issues when cutting internal threads out of existing material.  If the Cut (or SubtractivePipe) seems to have failed it could be because of the issues FreeCAD has with coplanar boolean operations.  The solution for this is to move either the base object or the cutting tool slightly.<br/>
+
+
 ## Open Online Calculator Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/OpenOnlineCalculator.png" alt="open online calculator"><br/>
 Opens on online calculator for the metric sizes or for the ANSI UN and UNR inch sizes or for the ANSI Buttress sizes in the default browser.  It is possible (I think) that FreeCAD might not have permission to do this.  If so, then it will likely fail.  Use the calculator to get the minor diameter for the thread you wish to make.  For inch sizes, the 2A and 2B tolerances are for the normal fit.  For Buttress threads class 2 is normal, class 3 is tighter fit.  For metric size v threads the 6g tolerance is for normal fit.  Typically there will be 2 minor diameters to select from: a minimum and a maximum.  If you make the internal thread a little bit smaller the fit will be tighter.  If you make the external thread a little bit smaller the fit will be looser.  A good way to check the fit is to make the nut and the screw at the same time, then use the Part workbench cross-section tool to check the fit.
@@ -97,6 +106,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2019.08.02 (version 1.50)<br/>
+** Add sweep tool
 * 2019.08.01 (version 1.42)<br/>
 ** Fix python2 bug related to creating buttress threads
 ** Fix bug in presets

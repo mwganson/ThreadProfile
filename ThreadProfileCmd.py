@@ -30,8 +30,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2019.08.01"
-__version__ = "1.42"
-version = 1.42
+__version__ = "1.50"
+version = 1.50
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -213,18 +213,6 @@ class _ThreadProfile(_DraftObject):
     # for compatibility with older versions
     _ViewProviderBSpline = _ViewProviderWire
 
-
-
-
-def initialize():
-    if FreeCAD.GuiUp:
-        Gui.addCommand("ThreadProfileCreateObject", ThreadProfileCreateObjectCommandClass())
-        Gui.addCommand("ThreadProfileMakeHelix", ThreadProfileMakeHelixCommandClass())
-        Gui.addCommand("ThreadProfileOpenOnlineCalculator", ThreadProfileOpenOnlineCalculatorCommandClass())
-        Gui.addCommand("ThreadProfileCreateButtressObject", ThreadProfileCreateButtressObjectCommandClass())
-        Gui.addCommand("ThreadProfileSettings", ThreadProfileSettingsCommandClass())
-
-
 #######################################################################################
 # Keep Toolbar active even after leaving workbench
 
@@ -331,6 +319,90 @@ class ThreadProfileMakeHelixCommandClass(object):
             self.Placement = selection[0].Object.Placement
             self.Name = selection[0].Object.Name
         return True
+###################################################################################
+
+class ThreadProfileDoSweepCommandClass(object):
+    """Perform sweep command"""
+    def __init__(self):
+        self.helixName = None
+        self.profileName = None
+        self.shapebinderName = None
+
+    def GetResources(self):
+        return {'Pixmap'  : os.path.join( iconPath , 'DoSweep.png') ,
+            'MenuText': "&Do Sweep" ,
+            'ToolTip' : "Sweep selected thread profile along selected helix or shapebinder"}
+ 
+    def Activated(self):
+        doc = FreeCAD.ActiveDocument
+        import PartDesignGui
+        import Part
+        from PySide import QtGui,QtCore
+        body = FreeCADGui.ActiveDocument.ActiveView.getActiveObject("pdbody")
+        QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        if self.helixName:
+            doc.openTransaction("Perform sweep")
+            doc.addObject('Part::Sweep','Sweep')
+            doc.ActiveObject.Sections=[getattr(doc,self.profileName),]
+            edgeList = []
+            count = len(getattr(doc,self.helixName).Shape.Edges)
+            for ii in range(1,count+1):
+                edgeList.append("Edge"+str(ii))
+            doc.ActiveObject.Spine=(getattr(doc,self.helixName),edgeList)
+            doc.ActiveObject.Solid=True
+            doc.ActiveObject.Frenet=True
+            FreeCADGui.getDocument(doc.Name).getObject(self.profileName).Visibility = False
+            FreeCADGui.getDocument(doc.Name).getObject(self.helixName).Visibility = False
+        elif body: #if there is active part design body
+            if "External" in getattr(doc,self.profileName).InternalOrExternal:
+                #additive part design sweep
+                doc.openTransaction("AdditivePipe")
+                pipe = body.newObject("PartDesign::AdditivePipe","AdditivePipe")
+            else:
+                doc.openTransaction("SubtractivePipe")
+                pipe = body.newObject("PartDesign::SubtractivePipe","SubtractivePipe")
+
+            pipe.Profile = getattr(doc, self.profileName)
+            pipe.Spine = getattr(doc,self.shapebinderName)
+            pipe.Mode = 'Frenet'
+            FreeCADGui.activeDocument().setEdit(pipe.Name,0)
+            Gui.activeDocument().hide(self.profileName)
+            Gui.activeDocument().hide(self.shapebinderName)
+            pipe.ViewObject.ShapeColor=body.ViewObject.ShapeColor
+            pipe.ViewObject.LineColor=body.ViewObject.LineColor
+            pipe.ViewObject.PointColor=body.ViewObject.PointColor
+            pipe.ViewObject.Transparency=body.ViewObject.Transparency
+            pipe.ViewObject.DisplayMode=body.ViewObject.DisplayMode
+            FreeCADGui.getDocument(doc.Name).getObject(pipe.Name).Visibility=True
+        doc.commitTransaction()
+        doc.recompute()
+        QtGui.QApplication.restoreOverrideCursor()
+        return
+   
+    def IsActive(self):
+        if not FreeCAD.ActiveDocument:
+            return False
+        selection = Gui.Selection.getSelectionEx()
+        if not selection:
+            return False
+        if len(selection) != 2:
+            return False
+        profileFound = False
+        helixFound = False
+        for s in selection:
+            if hasattr(s,"Object") and hasattr(s.Object,"Name") and "ThreadProfile" in s.Object.Name:
+                profileFound = True
+                self.profileName = s.Object.Name
+            if hasattr(s, "Object") and hasattr(s.Object,"Name") and "Helix" in s.Object.Name:
+                helixFound = True
+                self.helixName = s.Object.Name
+            if hasattr(s, "Object") and hasattr(s.Object,"Name") and "ShapeBinder" in s.Object.Name:
+                helixFound = True
+                self.shapebinderName = s.Object.Name
+        if profileFound and helixFound:
+            return True
+        else:
+            return False
 
 ###################################################################################
 
@@ -375,10 +447,16 @@ class ThreadProfileCreateObjectCommandClass(object):
  
     def Activated(self):
         doc = FreeCAD.ActiveDocument
+        QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         doc.openTransaction("Create VThreadProfile")
-        self.makeThreadProfile()
+        try:
+            self.makeThreadProfile()
+        except:
+            FreeCAD.Console.PrintError("ThreadProfile Error: Exception creating thread profile object.\n")
+            QtGui.QApplication.restoreOverrideCursor()
         doc.commitTransaction()
         doc.recompute()
+        QtGui.QApplication.restoreOverrideCursor()
         return
    
     def IsActive(self):
@@ -723,7 +801,11 @@ class ThreadProfileCreateButtressObjectCommandClass(ThreadProfileCreateObjectCom
     def Activated(self):
         doc = FreeCAD.ActiveDocument
         doc.openTransaction("Create Buttress ThreadProfile")
-        self.makeButtressThreadProfile()
+        try:
+            self.makeButtressThreadProfile()
+        except:
+            FreeCAD.Console.PrintError("ThreadProfile Error: Exception creating thread profile object.\n")
+            QtGui.QApplication.restoreOverrideCursor()
         doc.commitTransaction()
         doc.recompute()
         return
@@ -789,7 +871,14 @@ class ThreadProfileCreateButtressObjectCommandClass(ThreadProfileCreateObjectCom
         super(ThreadProfileCreateButtressObjectCommandClass, self).makeThreadProfile(name="BThreadProfile",internal_data = internal_buttress_data, external_data = external_buttress_data, presets = buttress_presets_data,minor_diameter=buttress_presets_data[13][2],pitch=25.4/10,internal_or_external="External",thread_count=10)
 
 #Gui.addCommand("ThreadProfileCreateButtressObject", ThreadProfileCreateButtressObjectCommandClass())
-
+def initialize():
+    if FreeCAD.GuiUp:
+        Gui.addCommand("ThreadProfileCreateObject", ThreadProfileCreateObjectCommandClass())
+        Gui.addCommand("ThreadProfileMakeHelix", ThreadProfileMakeHelixCommandClass())
+        Gui.addCommand("ThreadProfileOpenOnlineCalculator", ThreadProfileOpenOnlineCalculatorCommandClass())
+        Gui.addCommand("ThreadProfileCreateButtressObject", ThreadProfileCreateButtressObjectCommandClass())
+        Gui.addCommand("ThreadProfileDoSweep", ThreadProfileDoSweepCommandClass())
+        Gui.addCommand("ThreadProfileSettings", ThreadProfileSettingsCommandClass())
 
 
 initialize()
