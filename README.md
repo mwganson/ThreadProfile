@@ -64,8 +64,8 @@ modeling both the internal and the external threads for a project it is a good i
 
 ## FAQ
 * Why is there a line running up the thread?<br/>
-** There are actually 2 lines.  One is is the BSpline's seamline.  If you Pad / Extrude the profile you can see this seamline as a straight edge, similar to what you see in cylinders and extruded / padded circles.
-The other is a set of concentric rings and I have no idea what they are or how they got there.<br/>
+** There are actually 2 lines.  One is is the BSpline's seamline.  If you Pad / Extrude the profile you can see this seamline as a straight edge, similar to what you see in cylinders and extruded / padded circles.  The others are the seamlines from the helix.
+<br/>
 * My internal threads are always external.  What am I doing wrong?<br/>
 ** Use subtractive pipe in Part design to cut the internal thread out of an existing shape, e.g. a Pad.  In Part workbench use the Sweep object as a cutting tool to cut it out of an existing shape, e.g. an extruded hexagon.  (Ensure you have selected "Internal" in the "Internal Or External" ThreadProfile property when making internal threads.)<br/>
 * Is it possible to access this via Python scripting?<br/>
