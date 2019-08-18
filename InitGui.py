@@ -23,13 +23,13 @@
 #  
 ###################################################################################
 
-import threadprofilewb_locator
-threadprofileWBPath = os.path.dirname(threadprofilewb_locator.__file__)
-threadprofileWB_icons_path = os.path.join(threadprofileWBPath,'Resources','icons')
+import meshremodelwb_locator
+meshremodelWBPath = os.path.dirname(meshremodelwb_locator.__file__)
+meshremodelWB_icons_path = os.path.join(meshremodelWBPath,'Resources','icons')
 
-global main_threadprofileWB_Icon
+global main_meshremodelWB_Icon
 
-main_threadprofileWB_Icon = os.path.join(threadprofileWB_icons_path , 'ThreadProfileLogo.png')
+main_meshremodelWB_Icon = os.path.join(meshremodelWB_icons_path , 'MeshRemodelLogo.png')
 
 #def myFunc(string):
 #    print (string)
@@ -43,28 +43,34 @@ main_threadprofileWB_Icon = os.path.join(threadprofileWB_icons_path , 'ThreadPro
 
 ####################################################################################
 # Initialize the workbench 
-class ThreadProfileWorkbench(Workbench):
+class MeshRemodelWorkbench(Workbench):
  
 
-    global main_threadprofileWB_Icon
+    global main_meshremodelWB_Icon
 
-    MenuText = "ThreadProfile"
-    ToolTip = "ThreadProfile workbench"
-    Icon = main_threadprofileWB_Icon
+    MenuText = "MeshRemodel"
+    ToolTip = "MeshRemodel workbench"
+    Icon = main_meshremodelWB_Icon
     
     def __init__(self):
         pass
 
     def Initialize(self):
         "This function is executed when FreeCAD starts"
-        import ThreadProfileCmd #needed files for FreeCAD commands
-        self.list = ["ThreadProfileCreateObject", "ThreadProfileCreateButtressObject", 
-                    "ThreadProfileMakeHelix", "ThreadProfileDoSweep", "ThreadProfileOpenOnlineCalculator",
-                    "ThreadProfileSettings"] # A list of command names created in the line above
-        self.appendToolbar("ThreadProfile Commands",self.list[:-1]) # leave settings off toolbar
-        self.appendMenu("&ThreadProfile",self.list) # creates a new menu
+        import MeshRemodelCmd #needed files for FreeCAD commands
+        self.list = ["MeshRemodelCreatePointsObject",
+                    "MeshRemodelCreateLine",
+                    "MeshRemodelCreatePolygon",
+                    "MeshRemodelCreateCircle",
+                    "MeshRemodelCreateArc",
+                    "MeshRemodelCreateWire",
+                    "MeshRemodelCreateSketch",
+                    "MeshRemodelMergeSketches",
+                    "MeshRemodelSettings"] # A list of command names created in the line above
+        self.appendToolbar("MeshRemodel Commands",self.list[:-1]) # leave settings off toolbar
+        self.appendMenu("&MeshRemodel",self.list) # creates a new menu
         #considered putting the menu inside the Edit menu, but decided against it
-        #self.appendMenu(["&Edit","ThreadProfile"],self.list) # appends a submenu to an existing menu
+        #self.appendMenu(["&Edit","MeshRemodel"],self.list) # appends a submenu to an existing menu
 
 
  
@@ -88,24 +94,24 @@ class ThreadProfileWorkbench(Workbench):
         window = QtGui.QApplication.activeWindow()
         #freecad hides wb toolbars on leaving wb, we unhide ours here to keep it around
         #if the user has it set in parameters to do so
-        pg = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/ThreadProfile")
+        pg = FreeCAD.ParamGet("User parameter:Plugins/MeshRemodel")
         keep = pg.GetBool('KeepToolbar',True)
         if not keep:
             return
         tb = window.findChildren(QtGui.QToolBar) 
         for bar in tb:
-            if "ThreadProfile Commands" in bar.objectName():
+            if "MeshRemodel Commands" in bar.objectName():
                 bar.setVisible(True)
 
     def ContextMenu(self, recipient):
         "This is executed whenever the user right-clicks on screen"
         # "recipient" will be either "view" or "tree"
-        self.appendContextMenu("ThreadProfile",self.list) # add commands to the context menu
+        self.appendContextMenu("MeshRemodel",self.list) # add commands to the context menu
  
     def GetClassName(self): 
         # this function is mandatory if this is a full python workbench
         return "Gui::PythonWorkbench"
-wb = ThreadProfileWorkbench()
+wb = MeshRemodelWorkbench()
 Gui.addWorkbench(wb)
 
 

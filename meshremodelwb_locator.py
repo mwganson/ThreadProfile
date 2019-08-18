@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ###################################################################################
 #
-#  threadprofilewb_locator.py
+#  meshremodelwb_locator.py
 #  
 #  Copyright 2019 Mark Ganson <TheMarkster> mwganson at gmail
 #  
