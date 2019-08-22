@@ -106,6 +106,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2019.08.22 (version 1.51)<br/>
+** fix spelling errors
 * 2019.08.02 (version 1.50)<br/>
 ** Add sweep tool
 * 2019.08.01 (version 1.42)<br/>
