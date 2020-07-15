@@ -106,6 +106,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2020.07.15 (version 1.60)<br/>
+** add bottle thread buttress (SP4xx M type) 45/10 degree thread support
 * 2019.08.22 (version 1.51)<br/>
 ** fix spelling errors
 * 2019.08.02 (version 1.50)<br/>
