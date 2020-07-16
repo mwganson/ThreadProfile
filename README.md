@@ -106,6 +106,9 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2020.07.16 (version 1.62)<br/>
+** fix bug where only shell was being created
+** make external bottle threads 0.25mm smaller minor diameter
 * 2020.07.16 (version 1.61)<br/>
 ** improve continuity of bspline to C3 (was C2)
 ** should improve quality of finished sweep object
