@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2020.07.15"
-__version__ = "1.60"
-version = 1.60
+__date__    = "2020.07.16"
+__version__ = "1.61"
+version = 1.61
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -184,7 +184,8 @@ class _ThreadProfile(_DraftObject):
                     FreeCAD.Console.PrintError(translate('draft',  "_ThreadProfile.createGeometry: Closed with same first/last Point. Geometry not updated.")+"\n")
                     return
                 spline = Part.BSplineCurve()
-                spline.interpolate(obj.Points, PeriodicFlag = True, Parameters = self.knotSeq)
+                #spline.interpolate(obj.Points, PeriodicFlag = True, Parameters = self.knotSeq)
+                spline.approximate(Points = obj.Points, DegMin = 3, DegMax = 5, Tolerance = .003692, Continuity = 'C3', ParamType = 'ChordLength')
                 # DNC: bug fix: convert to face if closed
                 shape = Part.Wire(spline.toShape())
                 # Creating a face from a closed spline cannot be expected to always work
@@ -202,7 +203,8 @@ class _ThreadProfile(_DraftObject):
                     obj.Area = shape.Area
             else:
                 spline = Part.BSplineCurve()
-                spline.interpolate(obj.Points, PeriodicFlag = False, Parameters = self.knotSeq)
+                #spline.interpolate(obj.Points, PeriodicFlag = False, Parameters = self.knotSeq)
+                spline.approximate(Points = obj.Points, DegMin = 3, DegMax = 5, Tolerance = .003692, Continuity = 'C3', ParamType = 'ChordLength')
                 shape = spline.toShape()
                 obj.Shape = shape
                 if hasattr(obj,"Area") and hasattr(shape,"Area"):
