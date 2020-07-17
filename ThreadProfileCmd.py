@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2020.07.16"
-__version__ = "1.62"
-version = 1.62
+__date__    = "2020.07.17"
+__version__ = "1.63"
+version = 1.63
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -40,7 +40,7 @@ import Draft
 from FreeCAD import Base
 import Draft_rc
 from PySide.QtCore import QT_TRANSLATE_NOOP
-from Draft import _DraftObject, getParam, _ViewProviderWire, formatObject, select, translate
+from Draft import _DraftObject, getParam, _ViewProviderWire, formatObject, select
 
 if FreeCAD.GuiUp:
     from FreeCAD import Gui
@@ -180,7 +180,7 @@ class _ThreadProfile(_DraftObject):
             plm = obj.Placement
             if obj.Closed and (len(obj.Points) > 2):
                 if obj.Points[0] == obj.Points[-1]:  # should not occur, but OCC will crash
-                    FreeCAD.Console.PrintError(translate('draft',  "_ThreadProfile.createGeometry: Closed with same first/last Point. Geometry not updated.")+"\n")
+                    FreeCAD.Console.PrintError(QT_TRANSLATE_NOOP('draft',  "_ThreadProfile.createGeometry: Closed with same first/last Point. Geometry not updated.")+"\n")
                     return
                 spline = Part.BSplineCurve()
                 #spline.interpolate(obj.Points, PeriodicFlag = True, Parameters = self.knotSeq)
