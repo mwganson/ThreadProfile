@@ -106,6 +106,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2020.07.30 (version 1.64)<br/>
+** make subtractive pipe visible in dialog for external threads
 * 2020.07.16 (version 1.63)<br/>
 ** maintenance update to fix error related to recent FreeCAD update
 * 2020.07.16 (version 1.62)<br/>
