@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2020.07.17"
-__version__ = "1.63"
-version = 1.63
+__date__    = "2020.07.30"
+__version__ = "1.64"
+version = 1.64
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -369,7 +369,6 @@ class ThreadProfileDoSweepCommandClass(object):
             pipe.Profile = getattr(doc, self.profileName)
             pipe.Spine = getattr(doc,self.shapebinderName)
             pipe.Mode = 'Frenet'
-            FreeCADGui.activeDocument().setEdit(pipe.Name,0)
             Gui.activeDocument().hide(self.profileName)
             Gui.activeDocument().hide(self.shapebinderName)
             pipe.ViewObject.ShapeColor=body.ViewObject.ShapeColor
@@ -377,6 +376,8 @@ class ThreadProfileDoSweepCommandClass(object):
             pipe.ViewObject.PointColor=body.ViewObject.PointColor
             pipe.ViewObject.Transparency=body.ViewObject.Transparency
             pipe.ViewObject.DisplayMode=body.ViewObject.DisplayMode
+            pipe.ViewObject.makeTemporaryVisible(True)
+            FreeCADGui.activeDocument().setEdit(pipe.Name,0)
             FreeCADGui.getDocument(doc.Name).getObject(pipe.Name).Visibility=True
         doc.commitTransaction()
         doc.recompute()
