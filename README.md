@@ -1,5 +1,5 @@
 # ThreadProfile Workbench
-<img src="Resources/icons/ThreadProfileLogo.png" alt="icon">
+<img src="Resources/icons/ThreadProfileLogo.svg" alt="icon">
 
 ## Toolbar Icon
 Download the <a href = "https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/ThreadProfileSVGLogo.svg">SVG Toolbar Icon</a><br/>
@@ -21,11 +21,11 @@ There are a number of advantages to using ThreadProfile objects in your threads:
 The ThreadProfile object is really just a glorified rebranded Draft BSpline object.  In fact, the template code for producing it was unabashedly copied directly from the Draft workbench for use as a starting point, which I then modified to meet my needs.  In particular, the necessary properties, such as Pitch and Minor Diameter were added, along with the code necessary to produce the desired BSpline object.<br/>
 
 ## Create V thread profile Command
-<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateObject.png" alt="create object"><br/>
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateObject.svg" alt="create object"><br/>
 This creates the V thread ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.  There are a number of presets available, but you should double-check these by taking a cross-section of both parts to check the fit, then adjust the minor diameter accordingly.  If there is an active Part Design Body, the object will be placed inside it.  Failing that, if there is an active Part container the object will be placed into that.
 
 ## Create Buttress thread profile Command
-<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateButtressObject.png" alt="create object"><br/>
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateButtressObject.svg" alt="create object"><br/>
 This creates the Buttress thread ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.  If there is an active Part Design Body, the object will be placed inside it.  Failing that, if there is an active Part container the object will be placed into that.<br/>
 <br/>
 These are ANSI B1.9-1973 (R2007), Class 2 -- Standard Grade,  7 degree / 45 degree flat-rooted buttress threads.  (Class 3 -- Precision Grade would have 2/3 the tolerance of these for a tighter fit.)  The tolerance is based on a thread length engagement of 10 threads.  Shorter engagements could use a tighter fit and still work, longer engagements might require more tolerance.  You can adjust the tolerance by adjusting the minor diameter after selecting one of the presets.  Make the external minor diameter larger and the internal minor diameter smaller if you want a tighter fit, and vice versa for a looser fit.<br/>
@@ -33,13 +33,13 @@ These are ANSI B1.9-1973 (R2007), Class 2 -- Standard Grade,  7 degree / 45 degr
 There are other diameter / pitch combinations in the standard than are provided in the presets.  The ones provided are only the recommended combinations.  You can set the minor diameter and pitch to any values you want, but you'll need to work out the tolerances for yourself.<br/>
 
 ## Make Helix Command
-<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/MakeHelix.png" alt="make helix"><br/>
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/MakeHelix.svg" alt="make helix"><br/>
 The Make Helix command creates a Helix and sets its Pitch property to match the Pitch property of the ThreadProfile object.  This property is linked parametrically, thus any change to the ThreadProfile.Pitch property will also cause the Helix.Pitch property to update itself.  We also set the Helix.Height property to ThreadProfile.Pitch * ThreadProfile.ThreadCount, thus ensuring the Helix.Height property is such that the thread produced in the sweep will have Thread Count threads.  This is also parametrically linked.  Another thing that is done is the Helix.Placement property is copied from the ThreadProfile.Placement, thus the Helix, when created, will be positioned with the ThreadProfile object.  As of version 1.31 this placement property is now parametrically linked.  There is a settings option to change this to only put the Helix where the ThreadProfile is on creation of the helix.<br/>
 <br/>
 If there exists an active Part Design body when the helix is created, then a shapebinder will be created and placed in the active body, and the helix will be hidden.<br/>
 
 ## Do Sweep Command
-<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/DoSweep.png" alt="do sweep"><br/>
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/DoSweep.svg" alt="do sweep"><br/>
 The Do Sweep command will perform the sweep for you.  To use it you must first select the ThreadProfile object to sweep and the helix (or ShapeBinder) to sweep it along, then activate the command either from the toolbar or menu.<br/>
 <br/>
 If a helix is selected, then the operation performed is a Part workbench Sweep, with solid = True and Frenet = True.  This happens even if there is an active body and even if the ThreadProfile object is in the active body.  If there is an active body and the ShapeBinder is selected, then an AdditivePipe is performed unless the InternalOrExternal property is set to "Internal", in which case the Part Design Subtractive Sweep is used.<br/>
@@ -48,7 +48,7 @@ Be wary of coplanar issues when cutting internal threads out of existing materia
 
 
 ## Open Online Calculator Command
-<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/OpenOnlineCalculator.png" alt="open online calculator"><br/>
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/OpenOnlineCalculator.svg" alt="open online calculator"><br/>
 Opens on online calculator for the metric sizes or for the ANSI UN and UNR inch sizes or for the ANSI Buttress sizes in the default browser.  It is possible (I think) that FreeCAD might not have permission to do this.  If so, then it will likely fail.  Use the calculator to get the minor diameter for the thread you wish to make.  For inch sizes, the 2A and 2B tolerances are for the normal fit.  For Buttress threads class 2 is normal, class 3 is tighter fit.  For metric size v threads the 6g tolerance is for normal fit.  Typically there will be 2 minor diameters to select from: a minimum and a maximum.  If you make the internal thread a little bit smaller the fit will be tighter.  If you make the external thread a little bit smaller the fit will be looser.  A good way to check the fit is to make the nut and the screw at the same time, then use the Part workbench cross-section tool to check the fit.
 
 ## Quality Property
@@ -106,6 +106,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2020.08.04 (version 1.65)<br/>
+** switch to svg icons
 * 2020.07.30 (version 1.64)<br/>
 ** make subtractive pipe visible in dialog for external threads
 * 2020.07.16 (version 1.63)<br/>

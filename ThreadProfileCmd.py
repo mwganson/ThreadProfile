@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2020.07.30"
-__version__ = "1.64"
-version = 1.64
+__date__    = "2020.08.04"
+__version__ = "1.65"
+version = 1.65
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -227,7 +227,7 @@ class ThreadProfileSettingsCommandClass(object):
         pass       
 
     def GetResources(self):
-        return {'Pixmap'  : os.path.join( iconPath , 'Settings.png') , # the name of an icon file available in the resources
+        return {'Pixmap'  : os.path.join( iconPath , 'Settings.svg') , # the name of an icon file available in the resources
             'MenuText': "&Settings" ,
             'ToolTip' : "Workbench settings dialog"}
  
@@ -270,7 +270,7 @@ class ThreadProfileMakeHelixCommandClass(object):
         self.Name = None
 
     def GetResources(self):
-        return {'Pixmap'  : os.path.join( iconPath , 'MakeHelix.png') ,
+        return {'Pixmap'  : os.path.join( iconPath , 'MakeHelix.svg') ,
             'MenuText': "&Make Helix" ,
             'ToolTip' : "Make a Part::Helix object, set its pitch to match."}
  
@@ -333,7 +333,7 @@ class ThreadProfileDoSweepCommandClass(object):
         self.shapebinderName = None
 
     def GetResources(self):
-        return {'Pixmap'  : os.path.join( iconPath , 'DoSweep.png') ,
+        return {'Pixmap'  : os.path.join( iconPath , 'DoSweep.svg') ,
             'MenuText': "&Do Sweep" ,
             'ToolTip' : "Sweep selected thread profile along selected helix or shapebinder"}
  
@@ -417,7 +417,7 @@ class ThreadProfileOpenOnlineCalculatorCommandClass(object):
         pass
 
     def GetResources(self):
-        return {'Pixmap'  : os.path.join( iconPath , 'OpenOnlineCalculator.png') ,
+        return {'Pixmap'  : os.path.join( iconPath , 'OpenOnlineCalculator.svg') ,
             'MenuText': "&Open Online Calculator" ,
             'ToolTip' : "Open online calculator to determine minor diameter for desired thread fit."}
  
@@ -446,7 +446,7 @@ class ThreadProfileCreateObjectCommandClass(object):
     """Create Object command"""
 
     def GetResources(self):
-        return {'Pixmap'  : os.path.join( iconPath , 'CreateObject.png') ,
+        return {'Pixmap'  : os.path.join( iconPath , 'CreateObject.svg') ,
             'MenuText': "&Create V thread profile" ,
             'ToolTip' : "Create the standard V thread ThreadProfile object"}
  
@@ -799,7 +799,7 @@ class ThreadProfileCreateButtressObjectCommandClass(ThreadProfileCreateObjectCom
     """Create Object command"""
 
     def GetResources(self):
-        return {'Pixmap'  : os.path.join( iconPath , 'CreateButtressObject.png') ,
+        return {'Pixmap'  : os.path.join( iconPath , 'CreateButtressObject.svg') ,
             'MenuText': "&Create Buttress thread profile" ,
             'ToolTip' : "Create the 45 / 7 degree buttress thread ThreadProfile object"}
  
@@ -884,7 +884,7 @@ class ThreadProfileCreateBottleObjectCommandClass(ThreadProfileCreateObjectComma
     """Create Object command"""
 
     def GetResources(self):
-        return {'Pixmap'  : os.path.join( iconPath , 'CreateBottleObject.png') ,
+        return {'Pixmap'  : os.path.join( iconPath , 'CreateBottleObject.svg') ,
             'MenuText': "&Create Bottle thread profile" ,
             'ToolTip' : "Create the SP4xx (M) 45 degree / 10 degree buttress bottle thread ThreadProfile object"}
  
