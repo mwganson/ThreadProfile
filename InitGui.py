@@ -29,7 +29,7 @@ threadprofileWB_icons_path = os.path.join(threadprofileWBPath,'Resources','icons
 
 global main_threadprofileWB_Icon
 
-main_threadprofileWB_Icon = os.path.join(threadprofileWB_icons_path , 'ThreadProfileLogo.png')
+main_threadprofileWB_Icon = os.path.join(threadprofileWB_icons_path , 'ThreadProfileLogo.svg')
 
 #def myFunc(string):
 #    print (string)
