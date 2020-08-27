@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2020.08.04"
-__version__ = "1.65"
-version = 1.65
+__date__    = "2020.08.27"
+__version__ = "1.66"
+version = 1.66
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -170,6 +170,17 @@ class _ThreadProfile(_DraftObject):
                             fp.MinorDiameter = fp.presets_data[idx*3+1]
                         else:
                             fp.MinorDiameter = fp.presets_data[idx*3+2]
+        if prop == "ThreadCount":
+            ins = fp.InList
+            for inobj in ins:
+                if hasattr(inobj,"Spine"):
+                    spine = inobj.Spine
+                    helix = spine[0]
+                    edgeNames = []
+                    for ii in range(1,int(getattr(fp,prop))):
+                        edgeNames.append("Edge"+str(ii))
+                    inobj.Spine = [helix,edgeNames]
+
 
     def execute(self, obj):
         obj.Points = self.makePoints(obj)
@@ -394,6 +405,7 @@ class ThreadProfileDoSweepCommandClass(object):
             return False
         profileFound = False
         helixFound = False
+        self.helixName = ''
         for s in selection:
             if hasattr(s,"Object") and hasattr(s.Object,"Name") and "ThreadProfile" in s.Object.Name:
                 profileFound = True

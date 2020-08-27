@@ -106,6 +106,9 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2020.08.27 (version 1.66)<br/>
+** fix bug in ThreadCount property not updating Sweep object
+** fix bug in PartDesign where sometimes Part Sweep was used even if there was active body
 * 2020.08.04 (version 1.65)<br/>
 ** switch to svg icons
 * 2020.07.30 (version 1.64)<br/>
