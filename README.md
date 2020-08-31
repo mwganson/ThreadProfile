@@ -32,6 +32,10 @@ These are ANSI B1.9-1973 (R2007), Class 2 -- Standard Grade,  7 degree / 45 degr
 <br/>
 There are other diameter / pitch combinations in the standard than are provided in the presets.  The ones provided are only the recommended combinations.  You can set the minor diameter and pitch to any values you want, but you'll need to work out the tolerances for yourself.<br/>
 
+## Create Bottle thread profile Command
+<img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateBottleObject.png" alt="create bottle object"><br/>
+This creates a bottle thread object (SP4xx M type) 45 degree / 10 degree buttress thread.<br/>
+
 ## Make Helix Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/MakeHelix.svg" alt="make helix"><br/>
 The Make Helix command creates a Helix and sets its Pitch property to match the Pitch property of the ThreadProfile object.  This property is linked parametrically, thus any change to the ThreadProfile.Pitch property will also cause the Helix.Pitch property to update itself.  We also set the Helix.Height property to ThreadProfile.Pitch * ThreadProfile.ThreadCount, thus ensuring the Helix.Height property is such that the thread produced in the sweep will have Thread Count threads.  This is also parametrically linked.  Another thing that is done is the Helix.Placement property is copied from the ThreadProfile.Placement, thus the Helix, when created, will be positioned with the ThreadProfile object.  As of version 1.31 this placement property is now parametrically linked.  There is a settings option to change this to only put the Helix where the ThreadProfile is on creation of the helix.<br/>
