@@ -110,6 +110,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2021.03.03 (version 1.68)<br/>
+** fix bug where changing Thread Count parameter was not updating Sweep object properly
 * 2021.03.03 (version 1.67)<br/>
 ** accept galou's PR to use our own tr<br/>
 * 2020.08.27 (version 1.66)<br/>
