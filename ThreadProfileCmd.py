@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2021.03.03"
-__version__ = "1.68"
-version = 1.68
+__date__    = "2021.03.16"
+__version__ = "1.69"
+version = 1.69
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -184,7 +184,7 @@ class _ThreadProfile(_DraftObject):
                     spine = inobj.Spine
                     helix = spine[0]
                     edgeNames = []
-                    for ii in range(1,int(getattr(fp,prop))+1):
+                    for ii in range(1,math.ceil(getattr(fp,prop))+1):
                         edgeNames.append("Edge"+str(ii))
                     inobj.Spine = [helix,edgeNames]
 
