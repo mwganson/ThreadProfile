@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2021.03.16"
-__version__ = "1.69"
-version = 1.69
+__date__    = "2021.08.25"
+__version__ = "1.70"
+version = 1.70
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -254,10 +254,17 @@ class ThreadProfileSettingsCommandClass(object):
         from PySide import QtGui
         window = QtGui.QApplication.activeWindow()
         pg = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/ThreadProfile")
-        pg.SetBool("LinkHelixPlacementParametrically", True)
+        lh = pg.GetBool("LinkHelixPlacementParametrically", True)
         keep = pg.GetBool('KeepToolbar',True)
-        mostRecentTypesLength = pg.GetInt('mruLength',5)
         items=["Keep the toolbar active","Do not keep the toolbar active","Link helix placement parametrically", "Do not link helix placement parametrically","Cancel"]
+        if keep:
+            items[0]="*"+items[0]
+        else:
+            items[1] = "*"+items[1]
+        if lh:
+            items[2] = "*"+items[2]
+        else:
+            items[3] = "*"+items[3]
         item,ok = QtGui.QInputDialog.getItem(window,'ThreadProfile','Settings\n\nSelect the settings option\n',items,0,False)
         if ok and item == items[-1]:
             return
@@ -296,7 +303,8 @@ class ThreadProfileMakeHelixCommandClass(object):
         doc = FreeCAD.ActiveDocument
         doc.openTransaction("Make Helix")
         import Part,PartGui
-        doc.addObject("Part::Helix","Helix")
+        helix = doc.addObject("Part::Helix","Helix")
+        profile = doc.getObject(self.Name)
         doc.recompute()
         name = doc.ActiveObject.Name
         getattr(doc,name).Label = name
@@ -304,26 +312,21 @@ class ThreadProfileMakeHelixCommandClass(object):
         getattr(doc,name).setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch')
         pg = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/ThreadProfile")
         if pg.GetBool("LinkHelixPlacementParametrically", True):
-            getattr(doc,name).setExpression('Placement.Base.x',self.Name+'.Placement.Base.x')
-            getattr(doc,name).setExpression('Placement.Base.y',self.Name+'.Placement.Base.y')
-            getattr(doc,name).setExpression('Placement.Base.z',self.Name+'.Placement.Base.z')
-            getattr(doc,name).setExpression('Placement.Rotation.Angle',self.Name+'.Placement.Rotation.Angle')
-            getattr(doc,name).setExpression('Placement.Rotation.Axis.x',self.Name+'.Placement.Rotation.Axis.x')
-            getattr(doc,name).setExpression('Placement.Rotation.Axis.y',self.Name+'.Placement.Rotation.Axis.y')
-            getattr(doc,name).setExpression('Placement.Rotation.Axis.z',self.Name+'.Placement.Rotation.Axis.z')
+            helix.setExpression("Support",profile.Name+".Support")
+            helix.setExpression("MapMode",profile.Name+".MapMode")
+            helix.setExpression("MapPathParameter",profile.Name+".MapPathParameter")
+            helix.setExpression("MapReversed",profile.Name+".MapReversed")
         else:
-            getattr(doc,name).Placement=self.Placement
+            helix.Support = profile.Support
+            helix.MapMode = profile.MapMode
+            helix.MapPathParameter = profile.MapPathParameter
+            helix.MapReversed = profile.MapReversed
         body=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("pdbody")
         part=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("part")
         if part:
             part.Group=part.Group+[getattr(doc,name)]
         if body:
-            pass
-            import PartDesignGui
-            getattr(doc,body.Name).newObject('PartDesign::ShapeBinder','ShapeBinder')
-            getattr(doc,doc.ActiveObject.Name).Support = [(getattr(doc,name),'')]
-            getattr(FreeCADGui.ActiveDocument,name).Visibility=False
-
+            body.Group=body.Group+[getattr(doc,name)] #put helix in body to avoid out of scope warnings
         doc.commitTransaction()
         doc.recompute()
         return
@@ -348,12 +351,11 @@ class ThreadProfileDoSweepCommandClass(object):
     def __init__(self):
         self.helixName = None
         self.profileName = None
-        self.shapebinderName = None
 
     def GetResources(self):
         return {'Pixmap'  : os.path.join( iconPath , 'DoSweep.svg') ,
             'MenuText': "&Do Sweep" ,
-            'ToolTip' : "Sweep selected thread profile along selected helix or shapebinder"}
+            'ToolTip' : "Sweep selected thread profile along selected helix"}
 
     def Activated(self):
         doc = FreeCAD.ActiveDocument
@@ -362,7 +364,7 @@ class ThreadProfileDoSweepCommandClass(object):
         from PySide import QtGui,QtCore
         body = FreeCADGui.ActiveDocument.ActiveView.getActiveObject("pdbody")
         QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-        if self.helixName:
+        if not body:
             doc.openTransaction("Perform sweep")
             doc.addObject('Part::Sweep','Sweep')
             doc.ActiveObject.Sections=[getattr(doc,self.profileName),]
@@ -385,10 +387,10 @@ class ThreadProfileDoSweepCommandClass(object):
                 pipe = body.newObject("PartDesign::SubtractivePipe","SubtractivePipe")
 
             pipe.Profile = getattr(doc, self.profileName)
-            pipe.Spine = getattr(doc,self.shapebinderName)
+            pipe.Spine = getattr(doc,self.helixName)
             pipe.Mode = 'Frenet'
             Gui.activeDocument().hide(self.profileName)
-            Gui.activeDocument().hide(self.shapebinderName)
+            Gui.activeDocument().hide(self.helixName)
             pipe.ViewObject.ShapeColor=body.ViewObject.ShapeColor
             pipe.ViewObject.LineColor=body.ViewObject.LineColor
             pipe.ViewObject.PointColor=body.ViewObject.PointColor
@@ -420,9 +422,6 @@ class ThreadProfileDoSweepCommandClass(object):
             if hasattr(s, "Object") and hasattr(s.Object,"Name") and "Helix" in s.Object.Name:
                 helixFound = True
                 self.helixName = s.Object.Name
-            if hasattr(s, "Object") and hasattr(s.Object,"Name") and "ShapeBinder" in s.Object.Name:
-                helixFound = True
-                self.shapebinderName = s.Object.Name
         if profileFound and helixFound:
             return True
         else:
