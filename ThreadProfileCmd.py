@@ -111,7 +111,7 @@ class _ThreadProfile(_DraftObject):
         if not hasattr(obj, "Parameterization"):
             obj.addProperty("App::PropertyFloat","Parameterization","ThreadProfile",QT_TRANSLATE_NOOP("App::Property","Parameterization factor"))
             obj.Parameterization = 1.0
-            obj.setEditorMode("Parameterization", 2)
+            obj.setEditorMode("Parameterization", 0)
             self.knotSeq = []
 
     def parameterization (self, pts, a, closed):
