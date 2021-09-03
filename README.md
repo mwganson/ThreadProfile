@@ -55,6 +55,9 @@ Be wary of coplanar issues when cutting internal threads out of existing materia
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/OpenOnlineCalculator.svg" alt="open online calculator"><br/>
 Opens on online calculator for the metric sizes or for the ANSI UN and UNR inch sizes or for the ANSI Buttress sizes in the default browser.  It is possible (I think) that FreeCAD might not have permission to do this.  If so, then it will likely fail.  Use the calculator to get the minor diameter for the thread you wish to make.  For inch sizes, the 2A and 2B tolerances are for the normal fit.  For Buttress threads class 2 is normal, class 3 is tighter fit.  For metric size v threads the 6g tolerance is for normal fit.  Typically there will be 2 minor diameters to select from: a minimum and a maximum.  If you make the internal thread a little bit smaller the fit will be tighter.  If you make the external thread a little bit smaller the fit will be looser.  A good way to check the fit is to make the nut and the screw at the same time, then use the Part workbench cross-section tool to check the fit.
 
+## Parameterization Property
+This property can change the shape of the threadprofile object.  If you are not satisified with the looks of the threads when viewed up close after zooming in, you can try modifying this property to see what difference it makes.  Default is 1.0.  It's value can range from 0.0 to 1.0.
+
 ## Quality Property
 The ThreadProfile object appears at first glance to be a simple circle, but it's not.  As mentioned above, it's a BSpline.  Think of it as a circle with a varying radius around the circumference.  For every degree there are 2 points used to define the curve, 720 points in all.  Quality 2 profiles use only every other point, in other words 360 points or 1 point per degree.  Quality 3 uses only every 3rd point, and so on, up to 12 Quality settings at this time.  Previously I thought Quality 1 was always better because there were more points defining the curve, but counter-intuitively this is not the case.  More is not always better.  I've set new defaults for this property for the different profile types.  Examine your threads up close by zooming in. If they appear rough try experimenting with different Quality values.<br/>
 <br/>
@@ -110,6 +113,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2021.09.02 (version 1.72)<br/>
+** Expose Parameterization property for user editing.  This property can change the shape of the threads.  Default: 1.0.  Range of values: 0.0 to 1.0.
 * 2021.09.02 (version 1.71)<br/>
 ** bug fix -- generated threads were failing check geometry with self-intersections
 ** Change Quality defaults for the different thread types.
