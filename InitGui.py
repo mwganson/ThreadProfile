@@ -68,10 +68,19 @@ class ThreadProfileWorkbench(Workbench):
 
 
  
+    def callback(self,hasUpdate):
+        if hasUpdate:
+            FreeCAD.Console.PrintMessage("ThreadProfile has an update available via the addon manager.\n")
+        #else:
+            #FreeCAD.Console.PrintMessage("ThreadProfile up to date\n")
+ 
     def Activated(self):
         "This function is executed when the workbench is activated"
         #global act
         #act.setVisible(True)
+        import AddonManager as AM
+        if hasattr(AM,"check_updates"):
+            AM.check_updates("ThreadProfile",self.callback)
         return
  
     def Deactivated(self):
