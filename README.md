@@ -113,6 +113,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2021.10.01 (version 1.73)<br/>
+* notify user in report view if update is available
 * 2021.09.02 (version 1.72)<br/>
 ** Expose Parameterization property for user editing.  This property can change the shape of the threads.  Default: 1.0.  Range of values: 0.0 to 1.0.
 * 2021.09.02 (version 1.71)<br/>
