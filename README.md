@@ -73,10 +73,12 @@ This is the minor diameter of your thread.  This is *NOT* the nominal diameter. 
 
 ## Continuity
 What is this?  This is a property of the underlying BSpline object.  This is readonly and is only included for informational purposes.  Normally, this should be C2 continuity.  You can read more about smoothness <a href="https://en.wikipedia.org/wiki/Smoothness">here</a>.<br/>
+## Height
+This is the height of the sweep object (in mm).  Adjusting this adjusts the ThreadCount property to set the height.
 ## Version
 This is the version of the ThreadProfile workbench used to create the ThreadProfile object, not the version of the ThreadProfile workbench currently installed.<br/>
 ## Thread Count
-When a Helix is created using the Make Helix command the Height property of the Helix is set to a height such that Thread Count number of threads will be created.
+When a Helix is created using the Make Helix command the Height property of the Helix is set to a height such that Thread Count number of threads will be created. As of v1.77 this is now readonly.  Use the Height property instead.
 ## Presets
 These are some presets I added to version 1.30 (likely to be expanded some in future versions).  I'm not entirely sure how accurate the data is.  Do not blindly rely on it.  You should still lookup the minimum and maximum minor diamters for your desired fit tolerance.  If you are
 modeling both the internal and the external threads for a project it is a good idea to take cross sections of both so you can inspect the fit on the screen.<br/>
@@ -116,6 +118,10 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2021.10.17 (version 1.77)<br/>
+* add Height property, set ThreadCount to readonly
+** if you still want to use ThreadCount you can do so in the python console.  Select thread profile, Ctrl+Shift+P to send
+   to the console.  Enter in the console: obj.ThreadCount = 10.  It can still also be used in expressions, such as in a spreadsheet cell.
 * 2021.10.17 (version 1.76)<br/>
 * fix bug related to helix height
 * 2021.10.17 (version 1.75)<br/>

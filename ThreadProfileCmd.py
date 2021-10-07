@@ -62,7 +62,8 @@ class _ThreadProfile(_DraftObject):
     def __init__(self, obj):
         _DraftObject.__init__(self,obj,"ThreadProfile")
         obj.addProperty("App::PropertyFloat", "Version", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property","The version of ThreadProfile Workbench used to create this object")).Version = version
-        obj.addProperty("App::PropertyFloat", "ThreadCount", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property","Height of thread in terms of number of threads, applied to Helix if created with workbench")).ThreadCount=10
+        obj.addProperty("App::PropertyFloat", "ThreadCount", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property","Height of thread in terms of number of threads, applied to Helix if created with workbench.\n Now readonly, adjust Height property instead.")).ThreadCount=10
+        obj.addProperty("App::PropertyFloat","Height", "ThreadProfile","Height of swept thread, adjusts ThreadCount property").Height = 10
         obj.addProperty("App::PropertyVectorList","Points","ThreadProfile", QT_TRANSLATE_NOOP("App::Property","The points of the B-spline"))
         obj.addProperty("App::PropertyBool","Closed","ThreadProfile",QT_TRANSLATE_NOOP("App::Property","If the B-spline is closed or not"))
         obj.addProperty("App::PropertyBool","MakeFace","ThreadProfile",QT_TRANSLATE_NOOP("App::Property","Create a face if this spline is closed"))
@@ -79,7 +80,7 @@ class _ThreadProfile(_DraftObject):
         obj.addProperty("App::PropertyString","Helix","ThreadProfile","Name of the helix object associated with the profile, if any")
         obj.addProperty("App::PropertyStringList","preset_names","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "list of preset names"))
         obj.addProperty("App::PropertyFloatList","presets_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property","list of pitches and diameters"))
-        obj.addProperty("App::PropertyLength", "Pitch", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Pitch of the thread, use 25.4 / TPI if in mm mode else 1 / TPI to convert from threads per inch"))
+        obj.addProperty("App::PropertyLength", "Pitch", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Pitch of the thread, use 25.4 / TPI if in mm mode else 1 / TPI to convert from threads per inch")).Pitch =1
         obj.addProperty("App::PropertyEnumeration", "InternalOrExternal", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Whether to make internal or external thread profile"))
         obj.InternalOrExternal=["Internal", "External"]
         obj.InternalOrExternal="External"
@@ -114,6 +115,7 @@ class _ThreadProfile(_DraftObject):
         obj.setEditorMode("Area", 2)
         obj.setEditorMode("Version", 1)
         obj.setEditorMode("Continuity", 1)
+        obj.setEditorMode("ThreadCount",1)
         obj.setEditorMode("preset_names", 2)
         obj.setEditorMode("presets_data", 2)
         obj.MakeFace = getParam("fillmode",True)
@@ -231,6 +233,10 @@ class _ThreadProfile(_DraftObject):
                 elif fp.Variants == "3-Start":
                     helix.setExpression("Pitch",fp.Name+".Pitch*3")
                     helix.setExpression("Height",fp.Name+".ThreadCount*"+fp.Name+".Pitch*3")
+        if prop == "Height" or prop == "Variants":
+            if hasattr(fp,"ThreadCount") and hasattr(fp,"Pitch") and fp.Pitch.Value != 0:
+                fp.ThreadCount = fp.Height/fp.Pitch.Value
+                fp.ThreadCount = fp.ThreadCount / 3 if fp.Variants == "3-Start" else fp.ThreadCount / 2 if fp.Variants == "2-Start" else fp.ThreadCount
 
 
     def execute(self, obj):
