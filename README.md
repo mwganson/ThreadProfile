@@ -22,7 +22,10 @@ The ThreadProfile object is really just a glorified rebranded Draft BSpline obje
 
 ## Create V thread profile Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateObject.svg" alt="create object"><br/>
-This creates the V thread ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.  There are a number of presets available, but you should double-check these by taking a cross-section of both parts to check the fit, then adjust the minor diameter accordingly.  If there is an active Part Design Body, the object will be placed inside it.  Failing that, if there is an active Part container the object will be placed into that.
+This creates the V thread ThreadProfile object with default properties.  Create it first, and then set the desired properties in the data tab of the combo view.  There are a number of presets available, but you should double-check these by taking a cross-section of both parts to check the fit, then adjust the minor diameter accordingly.  If there is an active Part Design Body, the object will be placed inside it.  Failing that, if there is an active Part container the object will be placed into that.<br/>
+<br/>
+New for v1.74, there is an Angle property in V thread types (hidden for other types) that allows 2 options: the standard 60 degree option and an experimental 45 degree hopefully 3D printer-friendly version.  The presets are for the standard 60 degree threads and probably won't work very well for the 45 degree variant, but if you use both the external and internal the same preset they might (or might not) match each other.<br/>
+<br/>
 
 ## Create Buttress thread profile Command
 <img src="https://github.com/mwganson/ThreadProfile/blob/master/Resources/icons/CreateButtressObject.svg" alt="create object"><br/>
@@ -113,6 +116,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2021.10.07 (version 1.74)<br/>
+* Support nonstanard 45 degree V threads for 3D printing
 * 2021.10.01 (version 1.73)<br/>
 * notify user in report view if update is available
 * 2021.09.02 (version 1.72)<br/>
