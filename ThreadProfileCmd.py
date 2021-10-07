@@ -30,8 +30,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2021.10.07"
-__version__ = "1.75"
-version = 1.75
+__version__ = "1.76"
+version = 1.76
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -224,10 +224,13 @@ class _ThreadProfile(_DraftObject):
             if helix:
                 if fp.Variants =="2-Start":
                     helix.setExpression("Pitch",fp.Name+".Pitch*2")
+                    helix.setExpression("Height",fp.Name+".ThreadCount*"+fp.Name+".Pitch*2")
                 elif fp.Variants == "60" or fp.Variants == "45":
                     helix.setExpression("Pitch",fp.Name+".Pitch")
+                    helix.setExpression("Height",fp.Name+".ThreadCount*"+fp.Name+".Pitch")
                 elif fp.Variants == "3-Start":
                     helix.setExpression("Pitch",fp.Name+".Pitch*3")
+                    helix.setExpression("Height",fp.Name+".ThreadCount*"+fp.Name+".Pitch*3")
 
 
     def execute(self, obj):
@@ -364,8 +367,11 @@ class ThreadProfileMakeHelixCommandClass(object):
             profile.Helix = helix.Name
             if profile.Variants == "2-Start":
                 getattr(doc,name).setExpression("Pitch",self.Name+'.Pitch*2')
+                helix.setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch*2')
             elif profile.Variants == "3-Start":
                 getattr(doc,name).setExpression("Pitch",self.Name+'.Pitch*3')
+                helix.setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch*3')
+
         pg = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/ThreadProfile")
         if pg.GetBool("LinkHelixPlacementParametrically", True):
             helix.setExpression("Support",profile.Name+".Support")

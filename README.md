@@ -116,6 +116,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2021.10.17 (version 1.76)<br/>
+* fix bug related to helix height
 * 2021.10.17 (version 1.75)<br/>
 * Support 2-start and 3-start v threads
 * 2021.10.07 (version 1.74)<br/>
