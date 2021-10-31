@@ -15,7 +15,7 @@
       <description>ThreadProfile object for creating internal/external threads</description>
       <version>1.76</version>
       <subdirectory>./</subdirectory>
-      <icon>ThreadProfile/Resources/icons/ThreadProfileLogo.svg</icon>
+      <icon>Resources/icons/ThreadProfileLogo.svg</icon>
       <freecadmin>0.19.0</freecadmin>
     </workbench>
   </content>
