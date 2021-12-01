@@ -118,6 +118,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2021.11.30 (version 1.77)<br/>
+* bug fix in calculating thread count from height
 * 2021.10.17 (version 1.77)<br/>
 * add Height property, set ThreadCount to readonly
 ** if you still want to use ThreadCount you can do so in the python console.  Select thread profile, Ctrl+Shift+P to send
