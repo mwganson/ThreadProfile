@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2021.10.07"
-__version__ = "1.76"
-version = 1.76
+__date__    = "2021.11/30"
+__version__ = "1.77"
+version = 1.77
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -233,7 +233,7 @@ class _ThreadProfile(_DraftObject):
                 elif fp.Variants == "3-Start":
                     helix.setExpression("Pitch",fp.Name+".Pitch*3")
                     helix.setExpression("Height",fp.Name+".ThreadCount*"+fp.Name+".Pitch*3")
-        if prop == "Height" or prop == "Variants":
+        if prop == "Height" or prop == "Variants" or prop == "Presets":
             if hasattr(fp,"ThreadCount") and hasattr(fp,"Pitch") and fp.Pitch.Value != 0:
                 fp.ThreadCount = fp.Height/fp.Pitch.Value
                 fp.ThreadCount = fp.ThreadCount / 3 if fp.Variants == "3-Start" else fp.ThreadCount / 2 if fp.Variants == "2-Start" else fp.ThreadCount
