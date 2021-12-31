@@ -29,7 +29,7 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2021.11/30"
+__date__    = "2021.12.31"
 __version__ = "1.78"
 version = 1.78
 
