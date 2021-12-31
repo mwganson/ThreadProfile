@@ -30,8 +30,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2021.11/30"
-__version__ = "1.77"
-version = 1.77
+__version__ = "1.78"
+version = 1.78
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
