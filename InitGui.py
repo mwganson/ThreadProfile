@@ -50,7 +50,7 @@ class ThreadProfileWorkbench(Workbench):
 
     MenuText = "ThreadProfile"
     ToolTip = "ThreadProfile workbench"
-    #Icon = main_threadprofileWB_Icon #define in package.xml file instead
+    Icon = main_threadprofileWB_Icon #define in package.xml file instead
     
     def __init__(self):
         pass

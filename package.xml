@@ -2,7 +2,7 @@
 <package format="1">
   <name>ThreadProfile</name>
   <description>ThreadProfile object for creating internal/external threads</description>
-  <version>1.78</version>
+  <version>1.79</version>
   <maintainer email="mwganson@gmail.com">TheMarkster</maintainer>
   <license file="LICENSE">LGPL-2.1</license>
   <url type="repository" branch="master">https://github.com/mwganson/ThreadProfile</url>
@@ -13,7 +13,7 @@
       <name>ThreadProfile</name>
       <classname>ThreadProfileWorkbench</classname>
       <description>ThreadProfile object for creating internal/external threads</description>
-      <version>1.78</version>
+      <version>1.79</version>
       <subdirectory>./</subdirectory>
       <icon>Resources/icons/ThreadProfileLogo.svg</icon>
       <freecadmin>0.19.0</freecadmin>
