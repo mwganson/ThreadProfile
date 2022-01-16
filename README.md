@@ -59,7 +59,7 @@ Be wary of coplanar issues when cutting internal threads out of existing materia
 Opens on online calculator for the metric sizes or for the ANSI UN and UNR inch sizes or for the ANSI Buttress sizes in the default browser.  It is possible (I think) that FreeCAD might not have permission to do this.  If so, then it will likely fail.  Use the calculator to get the minor diameter for the thread you wish to make.  For inch sizes, the 2A and 2B tolerances are for the normal fit.  For Buttress threads class 2 is normal, class 3 is tighter fit.  For metric size v threads the 6g tolerance is for normal fit.  Typically there will be 2 minor diameters to select from: a minimum and a maximum.  If you make the internal thread a little bit smaller the fit will be tighter.  If you make the external thread a little bit smaller the fit will be looser.  A good way to check the fit is to make the nut and the screw at the same time, then use the Part workbench cross-section tool to check the fit.
 
 ## Parameterization Property
-This property can change the shape of the threadprofile object.  If you are not satisified with the looks of the threads when viewed up close after zooming in, you can try modifying this property to see what difference it makes.  Default is 1.0.  It's value can range from 0.0 to 1.0.
+This property can change the shape of the threadprofile object.  If you are not satisfied with the looks of the threads when viewed up close after zooming in, you can try modifying this property to see what difference it makes.  Default is 1.0.  It's value can range from 0.0 to 1.0.
 
 ## Quality Property
 The ThreadProfile object appears at first glance to be a simple circle, but it's not.  As mentioned above, it's a BSpline.  Think of it as a circle with a varying radius around the circumference.  For every degree there are 2 points used to define the curve, 720 points in all.  Quality 2 profiles use only every other point, in other words 360 points or 1 point per degree.  Quality 3 uses only every 3rd point, and so on, up to 12 Quality settings at this time.  Previously I thought Quality 1 was always better because there were more points defining the curve, but counter-intuitively this is not the case.  More is not always better.  I've set new defaults for this property for the different profile types.  Examine your threads up close by zooming in. If they appear rough try experimenting with different Quality values.<br/>
@@ -80,7 +80,7 @@ This is the version of the ThreadProfile workbench used to create the ThreadProf
 ## Thread Count
 When a Helix is created using the Make Helix command the Height property of the Helix is set to a height such that Thread Count number of threads will be created. As of v1.77 this is now readonly.  Use the Height property instead.
 ## Presets
-These are some presets I added to version 1.30 (likely to be expanded some in future versions).  I'm not entirely sure how accurate the data is.  Do not blindly rely on it.  You should still lookup the minimum and maximum minor diamters for your desired fit tolerance.  If you are
+These are some presets I added to version 1.30 (likely to be expanded some in future versions).  I'm not entirely sure how accurate the data is.  Do not blindly rely on it.  You should still lookup the minimum and maximum minor diameters for your desired fit tolerance.  If you are
 modeling both the internal and the external threads for a project it is a good idea to take cross sections of both so you can inspect the fit on the screen.<br/>
 
 ## FAQ
