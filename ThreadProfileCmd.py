@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2022.01.01"
-__version__ = "1.79"
-version = 1.79
+__date__    = "2022.01.30"
+__version__ = "1.80"
+version = 1.80
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -384,11 +384,13 @@ class ThreadProfileMakeHelixCommandClass(object):
             helix.setExpression("MapMode",profile.Name+".MapMode")
             helix.setExpression("MapPathParameter",profile.Name+".MapPathParameter")
             helix.setExpression("MapReversed",profile.Name+".MapReversed")
+            helix.setExpression("AttachmentOffset",profile.Name+".AttachmentOffset")
         else:
             helix.Support = profile.Support
             helix.MapMode = profile.MapMode
             helix.MapPathParameter = profile.MapPathParameter
             helix.MapReversed = profile.MapReversed
+            helix.AttachmentOffset = profile.AttachmentOffset
         body=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("pdbody")
         part=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("part")
         if part:
