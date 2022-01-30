@@ -84,6 +84,8 @@ These are some presets I added to version 1.30 (likely to be expanded some in fu
 modeling both the internal and the external threads for a project it is a good idea to take cross sections of both so you can inspect the fit on the screen.<br/>
 
 ## FAQ
+* When zooming in close the thread surface looks very rough.  What can be done about this? <br/>
+** I believe this only affects the way the object appears on the screen.  Here are some things you can do to try to improve the appearance.  Switch to the view tab of the sweep object (or body if in Part Design) and adjust the Deviation property to something like 0.1.  The Angular Deflection property might also have an effect.  This should smooth the surface rendering, but at the expense of longer processing times.  Check the Quality property of the ThreadProfile object and see if changing that up or down can help the appearance.  Check the Parameterization property and try different settings for it, for example, 0.25 instead of 1.0.
 * Why is there a line running up the thread?<br/>
 ** There are actually multiple lines.  One is is the BSpline's seamline.  If you Pad / Extrude the profile you can see this seamline as a straight edge, similar to what you see in cylinders and extruded / padded circles.  The others are the seamlines from the helix.
 <br/>
@@ -118,6 +120,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2022.01.30 (version 1.80)<br/>
+* link helix attachment offset property to threadprofile's attachment offset property
 * 2021.11.30 (version 1.77)<br/>
 * bug fix in calculating thread count from height
 * 2021.10.17 (version 1.77)<br/>
