@@ -120,6 +120,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2022.08.04 (version 1.82)<br/>
+* fix issue with helix not going into active body if body is inside active part container --thanks tritol
 * 2022.01.30 (version 1.80)<br/>
 * link helix attachment offset property to threadprofile's attachment offset property
 * 2021.11.30 (version 1.77)<br/>
