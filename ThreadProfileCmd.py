@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2022.01.30"
-__version__ = "1.80"
-version = 1.80
+__date__    = "2022.08.04"
+__version__ = "1.82"
+version = 1.82
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -393,10 +393,10 @@ class ThreadProfileMakeHelixCommandClass(object):
             helix.AttachmentOffset = profile.AttachmentOffset
         body=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("pdbody")
         part=FreeCADGui.ActiveDocument.ActiveView.getActiveObject("part")
-        if part:
-            part.Group=part.Group+[getattr(doc,name)]
         if body:
             body.Group=body.Group+[getattr(doc,name)] #put helix in body to avoid out of scope warnings
+        elif part:
+            part.Group=part.Group+[getattr(doc,name)]
         doc.commitTransaction()
         doc.recompute()
         return
