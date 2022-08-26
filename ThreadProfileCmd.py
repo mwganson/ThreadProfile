@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2022.08.04"
-__version__ = "1.82"
-version = 1.82
+__date__    = "2022.08.26"
+__version__ = "1.83"
+version = 1.83
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -280,12 +280,22 @@ class _ThreadProfile(_DraftObject):
                     obj.Area = shape.Area
             if hasattr(obj,"Variants"):
                 if obj.Variants == "2-Start":
-                    shape2 = shape.copy().rotate(Base.Vector(0,0,0),Base.Vector(0,0,1),180)
-                    obj.Shape = obj.Shape.fuse(shape2).removeSplitter().Face1
+                    plm = obj.Shape.Placement
+                    shape1 = obj.Shape.copy()
+                    shape1.Placement = Base.Placement()
+                    shape2 = shape1.copy().rotate(Base.Vector(0,0,0),Base.Vector(0,0,1),180)
+                    fuse = shape1.fuse(shape2).removeSplitter().Face1
+                    fuse.Placement = plm
+                    obj.Shape = fuse
                 elif obj.Variants == "3-Start":
-                    shape2 = shape.copy().rotate(Base.Vector(0,0,0),Base.Vector(0,0,1),120)
-                    shape3 = shape.copy().rotate(Base.Vector(0,0,0),Base.Vector(0,0,1),240)
-                    obj.Shape = obj.Shape.multiFuse([shape2,shape3]).removeSplitter().Face1
+                    plm = obj.Shape.Placement
+                    shape1 = obj.Shape.copy()
+                    shape1.Placement = Base.Placement()
+                    shape2 = shape1.copy().rotate(Base.Vector(0,0,0),Base.Vector(0,0,1),120)
+                    shape3 = shape1.copy().rotate(Base.Vector(0,0,0),Base.Vector(0,0,1),240)
+                    fuse = shape1.multiFuse([shape2,shape3]).removeSplitter().Face1
+                    fuse.Placement = plm
+                    obj.Shape = fuse
 
             obj.Continuity = spline.Continuity
             obj.Placement = plm
