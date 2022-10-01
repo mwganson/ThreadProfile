@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2022.08.26"
-__version__ = "1.83"
-version = 1.83
+__date__    = "2022.10.01"
+__version__ = "1.84"
+version = 1.84
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -884,8 +884,8 @@ class ThreadProfileCreateObjectCommandClass(object):
             ['7/8 in-14 UNF',25.4*0.0714,25.4*0.7874,25.4*0.7977],
             ['1 in-12 UNF',25.4*0.0714,25.4*0.8978,25.4*0.9098],
             ['1 in-14 UNF',25.4*0.0714,25.4*0.9132,25.4*0.923],
-            ['1 1/4 in-12 UNF',25.4*0.0833,25.4*1.0228,25.4*1.0348],
-            ['1 1/8 in-12 UNF',25.4*0.0833,25.4*1.1478,25.4*1.1598],
+            ['1 1/8 in-12 UNF',25.4*0.0833,25.4*1.0228,25.4*1.0348],
+            ['1 1/4 in-12 UNF',25.4*0.0833,25.4*1.1478,25.4*1.1598],
             ['1 3/8 in-12 UNF',25.4*0.0833,25.4*1.2728,25.4*1.2848],
             ['1 1/2 in-12 UNF',25.4*0.0833,25.4*1.3978,25.4*1.4098]]
         else:

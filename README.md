@@ -120,6 +120,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2022.10.01 (version 1.84)<br/>
+* fix issue with presets for 1 1/4-12 and 1 1/8-12 UNF
 * 2022.08.26 (version 1.83)<br/>
 * fix issue with multi start threads when threadprofile object is not at identity placement
 * 2022.08.04 (version 1.82)<br/>
