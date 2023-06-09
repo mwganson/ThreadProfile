@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2023.04.09"
-__version__ = "1.85"
-version = 1.85
+__date__    = "2023.06.09"
+__version__ = "1.86"
+version = 1.86
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -217,9 +217,12 @@ class _ThreadProfile(_DraftObject):
                 if hasattr(inobj,"Spine"):
                     spine = inobj.Spine
                     helix = spine[0]
-                    edgeNames = []
-                    for ii in range(1,math.ceil(getattr(fp,prop))+1):
-                        edgeNames.append("Edge"+str(ii))
+                    if hasattr(helix,"SegmentLength"):
+                        edgeNames = ["Edge1"]
+                    else: #for older versions of FreeCAD
+                        edgeNames = []
+                        for ii in range(1,math.ceil(getattr(fp,prop))+1):
+                            edgeNames.append("Edge"+str(ii))
                     inobj.Spine = [helix,edgeNames]
         if prop == "Variants":
             helix = FreeCAD.ActiveDocument.getObject(fp.Helix)
@@ -237,6 +240,10 @@ class _ThreadProfile(_DraftObject):
             if hasattr(fp,"ThreadCount") and hasattr(fp,"Pitch") and fp.Pitch.Value != 0:
                 fp.ThreadCount = fp.Height/fp.Pitch.Value
                 fp.ThreadCount = fp.ThreadCount / 3 if fp.Variants == "3-Start" else fp.ThreadCount / 2 if fp.Variants == "2-Start" else fp.ThreadCount
+                helix = FreeCAD.ActiveDocument.getObject(fp.Helix)
+                if helix and hasattr(helix,"SegmentLength"):
+                    fp.ThreadCount = fp.Height
+                    helix.SegmentLength = 0.0
 
 
     def execute(self, obj):
