@@ -193,7 +193,7 @@ class _ThreadProfile(_DraftObject):
 
         return points
 
-    def handleThreadCountChange(self, fp):
+    def handleThreadCountChange(self, fp, prop):
         ins = fp.InList
         for inobj in ins:
             if hasattr(inobj,"Spine"):
@@ -225,7 +225,7 @@ class _ThreadProfile(_DraftObject):
                         else:
                             fp.MinorDiameter = fp.presets_data[idx*3+2]
         if prop == "ThreadCount":
-            self.handleThreadCountChange(fp)
+            self.handleThreadCountChange(fp, prop)
         if prop == "Variants":
             helix = FreeCAD.ActiveDocument.getObject(fp.Helix)
             if helix:
@@ -242,11 +242,7 @@ class _ThreadProfile(_DraftObject):
             if hasattr(fp, "Variants") and hasattr(fp,"ThreadCount") and hasattr(fp,"Pitch") and fp.Pitch.Value != 0:
                 fp.ThreadCount = fp.Height/fp.Pitch.Value
                 fp.ThreadCount = fp.ThreadCount / 3 if fp.Variants == "3-Start" else fp.ThreadCount / 2 if fp.Variants == "2-Start" else fp.ThreadCount
-                self.handleThreadCountChange(fp)
-                #helix = FreeCAD.ActiveDocument.getObject(fp.Helix)
-                #if helix and hasattr(helix,"SegmentLength"):
-                    #fp.ThreadCount = fp.Height
-                    #helix.SegmentLength = 0.0
+                self.handleThreadCountChange(fp, prop)
 
 
     def execute(self, obj):
