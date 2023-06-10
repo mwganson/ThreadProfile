@@ -120,6 +120,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2023.06.10 (version 1.87)<br/>
+* fix issue 56 when pitch changed height was also changing
 * 2023.06.09 (version 1.86)<br/>
 * account for new SegmentLength property of Helix objects (addresses issue 56)
 * 2023.04.09 (version 1.85)<br/>
