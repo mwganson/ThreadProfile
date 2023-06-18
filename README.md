@@ -69,7 +69,7 @@ The ThreadProfile object appears at first glance to be a simple circle, but it's
 This is the pitch for the thread.  You also need to set this in the Helix Pitch property.  If you wish to make ANSI threads, such as 1/4-20, for example, you would set this value to 25.4/20 if you are in mm units or 1/20 if you are using inch units.  I keep FreeCAD in mm units, so I would use 25.4/20 for the Pitch for that thread.<br/>
 
 ## Minor Diameter
-This is the minor diameter of your thread.  This is *NOT* the nominal diameter.  You need to look this value up and use the one for your desired nominal diameter, pitch, and fit tolerance.  Here are links to online calculators for <a href="https://www.amesweb.info/Screws/AsmeUnifiedInchScrewThread.aspx">Unified Inch Screwthreads</a>, <a href="https://www.amesweb.info/Screws/IsoMetricScrewThread.aspx">Metric</a>, and for <a href="https://www.amesweb.info/Screws/ButtressInchScrewThreads.aspx">ANSI Buttress</a><br/>
+This is the minor diameter of your thread.  This is *NOT* the nominal diameter.  You need to look this value up and use the one for your desired nominal diameter, pitch, and fit tolerance.  Here are links to online calculators for <a href="https://amesweb.info/Screws/AsmeUnifiedInchScrewThread.aspx">Unified Inch Screwthreads</a>, <a href="https://amesweb.info/Screws/IsoMetricScrewThread.aspx">Metric</a>, and for <a href="https://amesweb.info/Screws/ButtressInchScrewThreads.aspx">ANSI Buttress</a><br/>
 
 ## Continuity
 What is this?  This is a property of the underlying BSpline object.  This is readonly and is only included for informational purposes.  Normally, this should be C2 continuity.  You can read more about smoothness <a href="https://en.wikipedia.org/wiki/Smoothness">here</a>.<br/>
