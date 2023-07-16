@@ -10,6 +10,9 @@ Can be installed via the AddonManager in Tools menu -> AddonManager if you have 
 ## Overview
 Use the 2d profile object created with this workbench to create threads by sweeping it along a helix of the appropriate height and pitch.  It is compatible for use in both the Part and Part Design workbenches in FreeCAD.  To use in Part Design if there is an active body the ThreadProfile object will be created inside the body.  Then select the ThreadProfile object and click the Make Helix toolbar icon to create a helix.  A new shapebinder will be created linking the helix, and the helix will be hidden.  You can then sweep it as you would a sketch using either the Additive Pipe (for external threads) or the Subtractive Pipe (for internal threads).  In Part workbench you would use the Sweep tool, which would then need to be cut (if an internal thread) from a suitable object, such as an extruded hexagon.<br/>
 <br/>
+## See also
+<a href="https://forum.freecad.org/viewtopic.php?t=67071">Threadmaker macro</a><br/>
+<br/>
 ## Advantages
 There are a number of advantages to using ThreadProfile objects in your threads:<br/>
 <br/>
