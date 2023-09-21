@@ -123,6 +123,12 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2023.09.30 (version 1.88)<br/>
+* fix issue with newer versions of FreeCAD where the new helix object was producing defective sweeps
+  (workaround is to set the Helix.SegmentLength property 1.0 instead of default of 0)
+* Up Quality property limits from 12 to 240 to give user more flexibility
+* When creating helix object select both the helix and the threadprofile object so the user can just
+  click the sweep icon instead of needing to select both objects.
 * 2023.06.10 (version 1.87)<br/>
 * fix issue 56 when pitch changed height was also changing
 * 2023.06.09 (version 1.86)<br/>
