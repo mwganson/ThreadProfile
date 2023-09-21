@@ -30,8 +30,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2023.09.21"
-__version__ = "1.88"
-version = 1.88
+__version__ = "1.89"
+version = 1.89
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -194,6 +194,8 @@ class _ThreadProfile(_DraftObject):
         return points
 
     def handleThreadCountChange(self, fp, prop):
+        if not "ThreadCount" in prop:
+            return
         ins = fp.InList
         for inobj in ins:
             if hasattr(inobj,"Spine"):
@@ -239,7 +241,7 @@ class _ThreadProfile(_DraftObject):
             if hasattr(fp, "Variants") and hasattr(fp,"ThreadCount") and hasattr(fp,"Pitch") and fp.Pitch.Value != 0:
                 fp.ThreadCount = fp.Height/fp.Pitch.Value
                 fp.ThreadCount = fp.ThreadCount / 3 if fp.Variants == "3-Start" else fp.ThreadCount / 2 if fp.Variants == "2-Start" else fp.ThreadCount
-                self.handleThreadCountChange(fp, prop)
+                #self.handleThreadCountChange(fp, prop)
 
 
     def execute(self, obj):
