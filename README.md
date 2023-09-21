@@ -123,7 +123,9 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
-* 2023.09.30 (version 1.88)<br/>
+* 2023.09.21 (version 1.89)<br/>
+* fix issue with sweep not updating on height change
+* 2023.09.21 (version 1.88)<br/>
 * fix issue with newer versions of FreeCAD where the new helix object was producing defective sweeps
   (workaround is to set the Helix.SegmentLength property 1.0 instead of default of 0)
 * Up Quality property limits from 12 to 240 to give user more flexibility
