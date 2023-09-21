@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2023.06.10"
-__version__ = "1.87"
-version = 1.87
+__date__    = "2023.09.21"
+__version__ = "1.88"
+version = 1.88
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -86,7 +86,7 @@ class _ThreadProfile(_DraftObject):
         obj.InternalOrExternal="External"
         obj.addProperty("App::PropertyEnumeration","Variants","ThreadProfile",QT_TRANSLATE_NOOP("App::Property","Standard 60 degree V threads, experimental 3D printer-friendly 45 degree threads, 2-start, 3-start\n(Presets only valid for 60 degree types)")).Variants=["60","45","2-Start","3-Start"]
         obj.addProperty("App::PropertyEnumeration", "Presets", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Some presets"))
-        obj.addProperty("App::PropertyIntegerConstraint", "Quality", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Quality of profile: controls how many points are used to create the bspline, the lower the number, the more points used. Experiment with different values if the thread looks rough up close."))
+        obj.addProperty("App::PropertyIntegerConstraint", "Quality", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Quality of profile: controls how many points are used to create the bspline, the lower the number, the more points used. Experiment with different values if the thread looks rough up close.  Maximum points used is 720. Quality is divided into 720 to determine how many points to use.  You can also control appearance in the view tab of the Body or Sweep with the Angular Deflection and Deviation properties."))
         obj.addProperty("App::PropertyString", "Continuity", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Continuity of the produced BSpline -- readonly"))
         obj.addProperty("App::PropertyStringList", "Instructions", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Instructions")).Instructions=[\
 "Expand this with the ... button to view instructions",\
@@ -100,7 +100,7 @@ class _ThreadProfile(_DraftObject):
 "I have provided some presets, but it is possible there could be some errors.  Double check for mission critical applications.",\
 "Also, the tolerances might be different from what you wish to have.  I believe the internal minor diameters are all minimum and the external are all maximum.",\
 ]
-        obj.Quality = (11,1,12,1) #11 default, 1 minimum, 12 max, 1 step size
+        obj.Quality = (11,1,240,1) #11 default, 1 minimum, 240 max, 1 step size
         obj.setEditorMode("internal_data", 2) #0 = normal, 1 = readonly, 2 = hidden
         obj.setEditorMode("Closed", 2)
         obj.setEditorMode("MakeFace", 2)
@@ -199,12 +199,9 @@ class _ThreadProfile(_DraftObject):
             if hasattr(inobj,"Spine"):
                 spine = inobj.Spine
                 helix = spine[0]
-                if hasattr(helix,"SegmentLength"):
-                    edgeNames = ["Edge1"]
-                else: #for older versions of FreeCAD
-                    edgeNames = []
-                    for ii in range(1,math.ceil(getattr(fp,prop))+1):
-                        edgeNames.append("Edge"+str(ii))
+                edgeNames = []
+                for ii in range(1,math.ceil(getattr(fp,prop))+1):
+                    edgeNames.append("Edge"+str(ii))
                 inobj.Spine = [helix,edgeNames]
 
     def onChanged(self, fp, prop):
@@ -382,9 +379,14 @@ class ThreadProfileMakeHelixCommandClass(object):
         profile = doc.getObject(self.Name)
         doc.recompute()
         name = doc.ActiveObject.Name
+        FreeCADGui.Selection.clearSelection()
+        FreeCADGui.Selection.addSelection(doc.Name,profile.Name)
+        FreeCADGui.Selection.addSelection(doc.Name,helix.Name)
         getattr(doc,name).Label = name
         getattr(doc,name).setExpression("Pitch",self.Name+'.Pitch')
         getattr(doc,name).setExpression("Height",self.Name+'.ThreadCount*'+self.Name+'.Pitch')
+        if hasattr(helix,"SegmentLength"):
+            helix.setExpression("SegmentLength","1")
         if hasattr(profile,"Helix"):
             profile.Helix = helix.Name
             if profile.Variants == "2-Start":
