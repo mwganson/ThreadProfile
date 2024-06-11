@@ -29,13 +29,14 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2023.09.21"
-__version__ = "1.89"
-version = 1.89
+__date__    = "2024.06.11"
+__version__ = "1.90"
+version = 1.90
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
 import math
+import traceback
 import Draft
 from FreeCAD import Base
 import Draft_rc
@@ -565,8 +566,11 @@ class ThreadProfileCreateObjectCommandClass(object):
         try:
             fp = self.makeThreadProfile()
             fp.setEditorMode("Variants",0)
-        except:
-            FreeCAD.Console.PrintError("ThreadProfile Error: Exception creating thread profile object.\n")
+        except Exception as e:
+            FreeCAD.Console.PrintError(
+    	        "ThreadProfile Error: Exception creating thread profile object.\n\n" +
+    	        '\n'.join(traceback.format_exception(e)) + "\n"
+            )
             QtGui.QApplication.restoreOverrideCursor()
         doc.commitTransaction()
         doc.recompute()
@@ -596,7 +600,8 @@ class ThreadProfileCreateObjectCommandClass(object):
         obj = FreeCAD.ActiveDocument.addObject("Part::Part2DObjectPython",fname)
         _ThreadProfile(obj)
         obj.Closed = True
-        obj.Support = None
+        if hasattr(obj, "Support"):
+            obj.Support = None
         obj.Quality = Quality
         #allow to include custom thread profile for internal_data or external_data
         #these are 720 floats of the x-coordinates
@@ -946,8 +951,11 @@ class ThreadProfileCreateButtressObjectCommandClass(ThreadProfileCreateObjectCom
         doc.openTransaction("Create Buttress ThreadProfile")
         try:
             self.makeButtressThreadProfile()
-        except:
-            FreeCAD.Console.PrintError("ThreadProfile Error: Exception creating thread profile object.\n")
+        except Exception as e:
+            FreeCAD.Console.PrintError(
+    	        "ThreadProfile Error: Exception creating thread profile object.\n\n" +
+    	        '\n'.join(traceback.format_exception(e)) + "\n"
+            )
             QtGui.QApplication.restoreOverrideCursor()
         doc.commitTransaction()
         doc.recompute()
@@ -1031,8 +1039,11 @@ class ThreadProfileCreateBottleObjectCommandClass(ThreadProfileCreateObjectComma
         doc.openTransaction("Create Bottle ThreadProfile")
         try:
             self.makeBottleThreadProfile()
-        except:
-            FreeCAD.Console.PrintError("ThreadProfile Error: Exception creating thread profile object.\n")
+        except Exception as e:
+            FreeCAD.Console.PrintError(
+    	        "ThreadProfile Error: Exception creating thread profile object.\n\n" +
+    	        '\n'.join(traceback.format_exception(e)) + "\n"
+            )
             QtGui.QApplication.restoreOverrideCursor()
         doc.commitTransaction()
         doc.recompute()

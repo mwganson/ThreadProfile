@@ -123,6 +123,9 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2024.06.11 (version 1.90)<br/>
+* fix issue with newer versions of 0.22.
+* improve exception messaging on failure to create threadprofile objects (thanks Mikael)
 * 2023.09.21 (version 1.89)<br/>
 * fix issue with sweep not updating on height change
 * 2023.09.21 (version 1.88)<br/>
