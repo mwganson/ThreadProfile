@@ -401,13 +401,19 @@ class ThreadProfileMakeHelixCommandClass(object):
 
         pg = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/ThreadProfile")
         if pg.GetBool("LinkHelixPlacementParametrically", True):
-            helix.setExpression("Support",profile.Name+".Support")
+            if hasattr(helix,"Support"):
+                helix.setExpression("Support",profile.Name+".Support")
+            else:
+                helix.setExpression("AttachmentSupport", profile.Name+".AttachmentSupport")
             helix.setExpression("MapMode",profile.Name+".MapMode")
             helix.setExpression("MapPathParameter",profile.Name+".MapPathParameter")
             helix.setExpression("MapReversed",profile.Name+".MapReversed")
             helix.setExpression("AttachmentOffset",profile.Name+".AttachmentOffset")
         else:
-            helix.Support = profile.Support
+            if hasattr(helix,"Support"):
+                helix.Support = profile.Support
+            else:
+                helix.AttachmentSupport = profileAttachmentSupport
             helix.MapMode = profile.MapMode
             helix.MapPathParameter = profile.MapPathParameter
             helix.MapReversed = profile.MapReversed
