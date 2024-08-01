@@ -133,7 +133,7 @@ The internal_data and external_data list properties define the radius of the Thr
 * Fix issue with Part Design in 0.22
 * Fix face not being made in 0.22
 * 2024.07.31 (version 1.91)<br/>
-* updaqte to work with 0.22 dev due to FreeCAD changing the name of the Support property to AttachmentSupport
+* update to work with 0.22 dev due to FreeCAD changing the name of the Support property to AttachmentSupport
 * 2024.06.11 (version 1.90)<br/>
 * fix issue with newer versions of 0.22.
 * improve exception messaging on failure to create threadprofile objects (thanks Mikael)
