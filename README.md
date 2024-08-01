@@ -66,7 +66,12 @@ This property can change the shape of the threadprofile object.  If you are not 
 
 ## Quality Property
 The ThreadProfile object appears at first glance to be a simple circle, but it's not.  As mentioned above, it's a BSpline.  Think of it as a circle with a varying radius around the circumference.  For every degree there are 2 points used to define the curve, 720 points in all.  Quality 2 profiles use only every other point, in other words 360 points or 1 point per degree.  Quality 3 uses only every 3rd point, and so on, up to 240 Quality settings at this time.  Previously I thought Quality 1 was always better because there were more points defining the curve, but counter-intuitively this is not the case.  More is not always better.  I've set new defaults for this property for the different profile types.  Examine your threads up close by zooming in. If they appear rough try experimenting with different Quality values.<br/>
+
+See also Deviation property, which now defaults to 0.1 for better looking rendering of the threads.
 <br/>
+
+## Deviation Property
+This sets the ViewObject.Deviation property of the Body if in Part Design or the Sweep object if in Part workbench to default of 0.1.  This makes the threads look much better on the screen when being rendered, but can also slow down FreeCAD.  Setting this to 0.5 will speed things up some, but at the expense of not as good looking threads.  I believe FreeCAD default for this is 0.2.  Set this to 0 if you want to set the deviation value of the body or sweep and have it not changed on recomputes.
 
 ## Pitch Property
 This is the pitch for the thread.  You also need to set this in the Helix Pitch property.  If you wish to make ANSI threads, such as 1/4-20, for example, you would set this value to 25.4/20 if you are in mm units or 1/20 if you are using inch units.  I keep FreeCAD in mm units, so I would use 25.4/20 for the Pitch for that thread.<br/>
@@ -123,6 +128,10 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2024.08.01 (version 1.92)<br/>
+* Add Deviation property, default to 0.1 for nicer looking threads
+* Fix issue with Part Design in 0.22
+* Fix face not being made in 0.22
 * 2024.07.31 (version 1.91)<br/>
 * updaqte to work with 0.22 dev due to FreeCAD changing the name of the Support property to AttachmentSupport
 * 2024.06.11 (version 1.90)<br/>
@@ -136,6 +145,10 @@ The internal_data and external_data list properties define the radius of the Thr
 * Up Quality property limits from 12 to 240 to give user more flexibility
 * When creating helix object select both the helix and the threadprofile object so the user can just
   click the sweep icon instead of needing to select both objects.
+* 2024.08.01 (version 1.92)<br/>
+* add Deviation property
+* 2024.07.31 (version 1.91)<br/>
+* update to work with 0.22
 * 2023.06.10 (version 1.87)<br/>
 * fix issue 56 when pitch changed height was also changing
 * 2023.06.09 (version 1.86)<br/>
