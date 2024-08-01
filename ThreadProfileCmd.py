@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2024.06.11"
-__version__ = "1.90"
-version = 1.90
+__date__    = "2024.08.01"
+__version__ = "1.92"
+version = 1.92
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -81,6 +81,7 @@ class _ThreadProfile(_DraftObject):
         obj.addProperty("App::PropertyString","Helix","ThreadProfile","Name of the helix object associated with the profile, if any")
         obj.addProperty("App::PropertyStringList","preset_names","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "list of preset names"))
         obj.addProperty("App::PropertyFloatList","presets_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property","list of pitches and diameters"))
+        obj.addProperty("App::PropertyFloatConstraint","Deviation","ThreadProfile", "Default is 0.1 for better looking threads, but 0.5 will be faster rendering.  Set this to 0 to ignore it and keep the sweep or body object at its current setting.").Deviation = (0.1,0,10000,0.1)
         obj.addProperty("App::PropertyLength", "Pitch", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Pitch of the thread, use 25.4 / TPI if in mm mode else 1 / TPI to convert from threads per inch")).Pitch =1
         obj.addProperty("App::PropertyEnumeration", "InternalOrExternal", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "Whether to make internal or external thread profile"))
         obj.InternalOrExternal=["Internal", "External"]
@@ -243,7 +244,10 @@ class _ThreadProfile(_DraftObject):
                 fp.ThreadCount = fp.Height/fp.Pitch.Value
                 fp.ThreadCount = fp.ThreadCount / 3 if fp.Variants == "3-Start" else fp.ThreadCount / 2 if fp.Variants == "2-Start" else fp.ThreadCount
                 #self.handleThreadCountChange(fp, prop)
-
+        if prop == "Deviation":
+            for dep in fp.InList:
+                if dep.isDerivedFrom("PartDesign::Body") or dep.isDerivedFrom("Part::Sweep"):
+                    dep.ViewObject.Deviation = fp.Deviation if fp.Deviation else dep.ViewObject.Deviation
 
     def execute(self, obj):
         obj.Points = self.makePoints(obj)
@@ -265,13 +269,9 @@ class _ThreadProfile(_DraftObject):
                 # Creating a face from a closed spline cannot be expected to always work
                 # Usually, if the spline is not flat the call of Part.Face() fails
                 try:
-                    if hasattr(obj,"MakeFace"):
-                        if obj.MakeFace:
-                            shape = Part.Face(shape)
-                    else:
-                        shape = Part.Face(shape)
-                except Part.OCCError:
-                    pass
+                    shape = Part.makeFace(shape, "Part::FaceMakerBullseye")
+                except Part.OCCError as e:
+                    FreeCAD.Console.PrintError(f"ThreadProfile can't make face {e}\n")
                 obj.Shape = shape
                 if hasattr(obj,"Area") and hasattr(shape,"Area"):
                     obj.Area = shape.Area
@@ -459,6 +459,10 @@ class ThreadProfileDoSweepCommandClass(object):
         import PartDesignGui
         import Part
         from PySide import QtGui,QtCore
+        profile = doc.getObject(self.profileName)
+        if not hasattr(profile, "Deviation"):
+            profile.addProperty("App::PropertyFloat","Deviation","ThreadProfile", "Default = 0.1, improves the looks of the thread, but 0.5 or higher is faster rendering.  Set to 0 to keep the current sweep or body deviation.").Deviation = (0.1,0,10000,0.1)
+
         body = FreeCADGui.ActiveDocument.ActiveView.getActiveObject("pdbody")
         QtGui.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         if not body:
@@ -472,9 +476,12 @@ class ThreadProfileDoSweepCommandClass(object):
             doc.ActiveObject.Spine=(getattr(doc,self.helixName),edgeList)
             doc.ActiveObject.Solid=True
             doc.ActiveObject.Frenet=True
+            doc.ActiveObject.ViewObject.Deviation = profile.Deviation if profile.Deviation else doc.ActiveObject.ViewObject.Deviation
             FreeCADGui.getDocument(doc.Name).getObject(self.profileName).Visibility = False
             FreeCADGui.getDocument(doc.Name).getObject(self.helixName).Visibility = False
+
         elif body: #if there is active part design body
+            body.ViewObject.Deviation = profile.Deviation
             if "External" in getattr(doc,self.profileName).InternalOrExternal:
                 #additive part design sweep
                 doc.openTransaction("AdditivePipe")
@@ -488,11 +495,11 @@ class ThreadProfileDoSweepCommandClass(object):
             pipe.Mode = 'Frenet'
             Gui.activeDocument().hide(self.profileName)
             Gui.activeDocument().hide(self.helixName)
-            pipe.ViewObject.ShapeColor=body.ViewObject.ShapeColor
-            pipe.ViewObject.LineColor=body.ViewObject.LineColor
-            pipe.ViewObject.PointColor=body.ViewObject.PointColor
-            pipe.ViewObject.Transparency=body.ViewObject.Transparency
-            pipe.ViewObject.DisplayMode=body.ViewObject.DisplayMode
+            #pipe.ViewObject.ShapeColor=body.ViewObject.ShapeColor
+            #pipe.ViewObject.LineColor=body.ViewObject.LineColor
+            #pipe.ViewObject.PointColor=body.ViewObject.PointColor
+            #pipe.ViewObject.Transparency=body.ViewObject.Transparency
+            #pipe.ViewObject.DisplayMode=body.ViewObject.DisplayMode
             pipe.ViewObject.makeTemporaryVisible(True)
             FreeCADGui.activeDocument().setEdit(pipe.Name,0)
             FreeCADGui.getDocument(doc.Name).getObject(pipe.Name).Visibility=True
