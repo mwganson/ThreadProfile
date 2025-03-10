@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2024.08.01"
-__version__ = "1.92"
-version = 1.92
+__date__    = "2025.03.10"
+__version__ = "1.93"
+version = 1.93
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -120,7 +120,7 @@ class _ThreadProfile(_DraftObject):
         obj.setEditorMode("ThreadCount",1)
         obj.setEditorMode("preset_names", 2)
         obj.setEditorMode("presets_data", 2)
-        obj.MakeFace = getParam("fillmode",True)
+        obj.MakeFace = True
         obj.Closed = True
         obj.Points = []
         self.assureProperties(obj)

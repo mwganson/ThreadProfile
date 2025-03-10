@@ -1,0 +1,2 @@
+# The following files were created outside this installation path during the installation of this Addon on 2024-12-12 22:56:27.092064+00:00:
+J:\Other computers\My Computer\Documents\freecad\Macros\thread_builder.FCMacro

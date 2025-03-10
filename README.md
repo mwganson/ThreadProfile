@@ -128,6 +128,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2025.03.10 (version 1.93)<br/>
+* Fix issue due to changes to FreeCAD v1.1 development version
 * 2024.08.01 (version 1.92)<br/>
 * Add Deviation property, default to 0.1 for nicer looking threads
 * Fix issue with Part Design in 0.22
