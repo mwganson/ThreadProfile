@@ -29,9 +29,9 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2025.03.10"
-__version__ = "1.93"
-version = 1.93
+__date__    = "2025.04.18"
+__version__ = "1.94"
+version = 1.94
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -41,7 +41,7 @@ import Draft
 from FreeCAD import Base
 import Draft_rc
 from PySide.QtCore import QT_TRANSLATE_NOOP
-from Draft import _DraftObject, getParam, _ViewProviderWire, formatObject, select
+from Draft import _DraftObject, _ViewProviderWire, formatObject, select
 
 if FreeCAD.GuiUp:
     from FreeCAD import Gui

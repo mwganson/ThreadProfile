@@ -128,6 +128,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2025.04.18 (version 1.94)<br/>
+* Fix issue due to changes to Draft workbench in FreeCAD 1.1 dev, no longer need getParam so remove import
 * 2025.03.10 (version 1.93)<br/>
 * Fix issue due to changes to FreeCAD v1.1 development version
 * 2024.08.01 (version 1.92)<br/>
