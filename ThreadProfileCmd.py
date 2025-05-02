@@ -30,8 +30,8 @@ __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
 __date__    = "2025.04.18"
-__version__ = "1.94"
-version = 1.94
+__version__ = "1.95"
+version = 1.95
 
 import FreeCAD, FreeCADGui, Part, os, math, re
 from PySide import QtCore, QtGui
@@ -70,6 +70,9 @@ class _ThreadProfile(_DraftObject):
         obj.addProperty("App::PropertyBool","MakeFace","ThreadProfile",QT_TRANSLATE_NOOP("App::Property","Create a face if this spline is closed"))
         obj.addProperty("App::PropertyArea","Area","ThreadProfile",QT_TRANSLATE_NOOP("App::Property","The area of this object"))
         obj.addProperty("App::PropertyLength", "MinorDiameter", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "The minor diameter of the thread"))
+        obj.addProperty("App::PropertyLength", "MajorDiameter", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "The major diameter of the thread"))
+        obj.addProperty("App::PropertyFloat", "d_delta", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", ""))
+        obj.addProperty("App::PropertyFloat", "Tolerance", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "The tolerance of the thread. It will be added to diameters"))
         obj.addProperty("App::PropertyFloatList","internal_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "Data used to construct internal thread"))
         obj.addProperty("App::PropertyFloatList","external_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "Data used to construct external thread"))
         obj.addProperty("App::PropertyFloatList","internal2S_data","ThreadProfile",QT_TRANSLATE_NOOP("App::Property", "Data used to construct 2 start internal thread"))
@@ -120,6 +123,7 @@ class _ThreadProfile(_DraftObject):
         obj.setEditorMode("ThreadCount",1)
         obj.setEditorMode("preset_names", 2)
         obj.setEditorMode("presets_data", 2)
+        obj.setEditorMode("d_delta", 2)
         obj.MakeFace = True
         obj.Closed = True
         obj.Points = []
@@ -160,6 +164,7 @@ class _ThreadProfile(_DraftObject):
             else:
                 FreeCAD.Console.PrintWarning("ThreadProfile: Unable to determine internal or external thread type, using external\n")
                 external=True
+        minor_diameter += obj.Tolerance
         step = obj.Quality #1 means do not skip any points, 2 means use every other, 3 every 3rd, etc.
         points = []
         alpha = 0
@@ -185,13 +190,18 @@ class _ThreadProfile(_DraftObject):
                 our_data = obj.external_data
             else:
                 our_data = obj.internal_data
+        max_diam = 0
         for ii in range(0, len(our_data),step):
             alpha += math.pi * 2 / len(our_data) * step
             od = our_data[ii]
             radius = minor_diameter / 2 + od * pitch
+            max_diam = max(max_diam, radius * 2)
             x = math.cos(alpha) * radius
             y = math.sin(alpha) * radius
             points.append(Base.Vector(x,y,0))
+
+        obj.d_delta = max_diam - minor_diameter
+        obj.MajorDiameter = max_diam - obj.Tolerance
 
         return points
 
@@ -207,6 +217,14 @@ class _ThreadProfile(_DraftObject):
                 for ii in range(1,math.ceil(getattr(fp,prop))+1):
                     edgeNames.append("Edge"+str(ii))
                 inobj.Spine = [helix,edgeNames]
+
+    def onDocumentRestored(self, obj):
+        if obj.Version < 1.95:
+            obj.addProperty("App::PropertyLength", "MajorDiameter", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "The major diameter of the thread"))
+            obj.addProperty("App::PropertyFloat", "Tolerance", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "The tolerance of the thread. It will be added to diameters"))
+            obj.addProperty("App::PropertyFloat", "d_delta", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", ""))
+            obj.setEditorMode("d_delta", 2)
+            self.makePoints(obj)
 
     def onChanged(self, fp, prop):
         if prop == "Parameterization":
@@ -225,6 +243,8 @@ class _ThreadProfile(_DraftObject):
                             fp.MinorDiameter = fp.presets_data[idx*3+1]
                         else:
                             fp.MinorDiameter = fp.presets_data[idx*3+2]
+        if prop == "MajorDiameter":
+            fp.MinorDiameter = fp.MajorDiameter.Value - fp.d_delta
         if prop == "ThreadCount":
             self.handleThreadCountChange(fp, prop)
         if prop == "Variants":
