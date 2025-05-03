@@ -128,8 +128,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
-* 2025.05.03 (version 1.96)<br/>
-* Show final minir and major diameters after applying tolerance
+* 2025.05.04 (version 1.96)<br/>
+* Show final minor and major diameters after applying tolerance
 * 2025.05.02 (version 1.95)<br/>
 * Accept PR from vovodroid to add major diameter and tolerance properties
 * minor diameter is automatically calculated from major diameter and vice versa if you change either or pitch

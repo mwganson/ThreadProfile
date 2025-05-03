@@ -3,7 +3,7 @@
   <name>ThreadProfile</name>
   <description>ThreadProfile object for creating internal/external threads</description>
   <version>1.96</version>
-  <date>2025.05.02</date>
+  <date>2025.05.04</date>
   <maintainer email="mwganson@gmail.com">TheMarkster</maintainer>
   <license file="LICENSE">LGPL-2.1</license>
   <url type="repository" branch="master">https://github.com/mwganson/ThreadProfile</url>

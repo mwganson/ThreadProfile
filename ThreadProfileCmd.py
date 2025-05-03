@@ -29,7 +29,7 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2025.05.03"
+__date__    = "2025.05.04"
 __version__ = "1.96"
 version = 1.96
 
@@ -233,7 +233,7 @@ class _ThreadProfile(_DraftObject):
                 obj.setEditorMode("d_delta", 2)
             if not hasattr(obj, "MajorDiameterFinal"):
                 obj.addProperty("App::PropertyLength", "MinorDiameterFinal", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "The minor diameter of the thread with tolerance"))
-                obj.addProperty("App::PropertyLength", "MajorDiameterFinal", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "The major diameter of the thread with tolerance"))            
+                obj.addProperty("App::PropertyLength", "MajorDiameterFinal", "ThreadProfile", QT_TRANSLATE_NOOP("App::Property", "The major diameter of the thread with tolerance"))
                 obj.setEditorMode("MinorDiameterFinal", 1)
                 obj.setEditorMode("MajorDiameterFinal", 1)
             self.makePoints(obj)
@@ -255,6 +255,8 @@ class _ThreadProfile(_DraftObject):
                             fp.MinorDiameter = fp.presets_data[idx*3+1]
                         else:
                             fp.MinorDiameter = fp.presets_data[idx*3+2]
+        if prop == "MajorDiameter":
+            fp.MinorDiameter = fp.MajorDiameter.Value - fp.d_delta
         if prop == "ThreadCount":
             self.handleThreadCountChange(fp, prop)
         if prop == "Variants":
