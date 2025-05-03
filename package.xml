@@ -2,7 +2,7 @@
 <package format="1" xmlns="https://wiki.freecad.org/Package_Metadata">
   <name>ThreadProfile</name>
   <description>ThreadProfile object for creating internal/external threads</description>
-  <version>1.95</version>
+  <version>1.96</version>
   <date>2025.05.02</date>
   <maintainer email="mwganson@gmail.com">TheMarkster</maintainer>
   <license file="LICENSE">LGPL-2.1</license>
@@ -15,7 +15,7 @@
       <name>ThreadProfile</name>
       <classname>ThreadProfileWorkbench</classname>
       <description>ThreadProfile object for creating internal/external threads</description>
-      <version>1.95</version>
+      <version>1.96</version>
       <subdirectory>./</subdirectory>
       <icon>Resources/icons/ThreadProfileLogo.svg</icon>
       <freecadmin>0.19.0</freecadmin>

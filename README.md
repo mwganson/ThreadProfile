@@ -128,9 +128,11 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2025.05.03 (version 1.96)<br/>
+* Show final minir and major diameters after applying tolerance
 * 2025.05.02 (version 1.95)<br/>
 * Accept PR from vovodroid to add major diameter and tolerance properties
-* minor diameter is automatically calculated from major diameter and vice versa if you change either
+* minor diameter is automatically calculated from major diameter and vice versa if you change either or pitch
 * tolerance is used to adjust the diameter +/- to change the fit
 * 2025.04.18 (version 1.94)<br/>
 * Fix issue due to changes to Draft workbench in FreeCAD 1.1 dev, no longer need getParam so remove import
