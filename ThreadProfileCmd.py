@@ -255,6 +255,8 @@ class _ThreadProfile(_DraftObject):
                             fp.MinorDiameter = fp.presets_data[idx*3+1]
                         else:
                             fp.MinorDiameter = fp.presets_data[idx*3+2]
+        if prop == "MajorDiameter":
+            fp.MinorDiameter = fp.MajorDiameter.Value - fp.d_delta
         if prop == "ThreadCount":
             self.handleThreadCountChange(fp, prop)
         if prop == "Variants":
