@@ -754,7 +754,7 @@ class ThreadProfileCreateObjectCommandClass(object):
             name = f'{format_rational(major_diameter_in)} in'
             return preset_uts('UNF', name, float(major_diameter_in), tpi)
 
-        # numbered UNC
+        # numbered UNF
         def nunf(number: int, tpi: float):
             major_diameter_in = uts_numbered_major_diameter_in(number)
             return preset_uts('UNF', f'#{number}', major_diameter_in, tpi)
@@ -763,7 +763,7 @@ class ThreadProfileCreateObjectCommandClass(object):
             name = f'{format_rational(major_diameter_in)} in'
             return preset_uts('UNS', name, float(major_diameter_in), tpi)
 
-        # numbered UNC
+        # numbered UNS
         def nuns(number: int, tpi: float):
             major_diameter_in = uts_numbered_major_diameter_in(number)
             return preset_uts('UNS', f'#{number}', major_diameter_in, tpi)
