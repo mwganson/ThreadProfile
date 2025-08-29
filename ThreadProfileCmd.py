@@ -29,8 +29,8 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2025.05.04"
-__version__ = "1.96"
+__date__    = "2025.08.29"
+__version__ = "1.97"
 
 from fractions import Fraction
 from numbers import Rational
