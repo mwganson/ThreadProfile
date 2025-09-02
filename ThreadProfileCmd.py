@@ -35,7 +35,7 @@ __version__ = "1.97"
 from fractions import Fraction
 from numbers import Rational
 
-version = 1.96
+version = 1.97
 
 import FreeCAD, FreeCADGui, Part, os
 from PySide import QtCore, QtGui
