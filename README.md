@@ -128,6 +128,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2025.09.02 (version 1.97)<br/>
+* Calculate preset values in functions to reduce risk of typo errors -- thanks SpaceBison
 * 2025.05.04 (version 1.96)<br/>
 * Show final minor and major diameters after applying tolerance
 * 2025.05.02 (version 1.95)<br/>
