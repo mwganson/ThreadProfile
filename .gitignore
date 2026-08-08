@@ -2,3 +2,6 @@
 *.bak
 .vs/
 .idea/
+*.code-workspace
+Resources/assets/_patch_bsw_into_cmd.py
+Resources/assets/_verify_bsw_patch.py
