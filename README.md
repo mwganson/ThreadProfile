@@ -136,6 +136,8 @@ The internal_data and external_data list properties define the radius of the Thr
 
 
 #### Release notes:<br/>
+* 2026.09.14 (version 2.03)<br/>
+* Fix some issues with thread presets -- thanks whirlyknurly
 * 2026.08.05 (version 2.02)<br/>
 * Add BSF (Whitworth fine) presets to the Whitworth command; rename UI to Whitworth (BSW/BSF)
 * Add Machining Doctor BSF chart link to Open Online Calculator

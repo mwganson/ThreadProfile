@@ -29,13 +29,13 @@
 __title__   = "ThreadProfile"
 __author__  = "Mark Ganson <TheMarkster>"
 __url__     = "https://github.com/mwganson/ThreadProfile"
-__date__    = "2026.07.28"
-__version__ = "2.02"
+__date__    = "2026.09.14"
+__version__ = "2.03"
 
 from fractions import Fraction
 from numbers import Rational
 
-version = 2.02
+version = 2.03
 
 import FreeCAD, FreeCADGui, Part, os
 from PySide import QtCore, QtGui
